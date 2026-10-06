@@ -1,0 +1,38 @@
+# GT6 - MultiHelper porting
+
+Finished ports:
+- [x] Autoclave
+- [ ] Bath
+- [ ] Bedrock Drill
+- [ ] Centrifuge
+- [x] Coagulator
+- [x] Coke Oven
+- [ ] Crucible
+- [ ] Crusher
+- [ ] Cryo-Distillation Tower
+- [ ] Distillation Tower
+- [ ] Electrolyzer
+- [ ] Fermenter
+- [ ] Fusion Reactor
+- [ ] Implosion Compressor
+- [ ] Large Boiler
+- [ ] Large Dynamo
+- [ ] Large Heat Exchanger
+- [ ] Large Turbine
+- [ ] Large Gas Turbine
+- [ ] Large Steam Turbine
+- [ ] Lightning Rod
+- [ ] Logistics Core
+- [ ] Matter Fabricator
+- [ ] Mixer
+- [ ] Oven
+- [ ] Shredder
+- [ ] Sluice
+- [ ] Squeezer
+- [ ] Tank
+- [ ] Tank 3x3x3
+- [ ] Tank 3x3x3 Metal
+- [ ] Tank 3x3x3 Wood
+- [ ] Tank 5x5x5
+- [ ] Tank 5x5x5 Metal
+- [ ] Von Da Graagg Generator
