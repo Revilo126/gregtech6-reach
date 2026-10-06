@@ -16,6 +16,8 @@ Nothing (I tend to only add finished Stuff to the Changelog).
 [ADDED] Vindicator Flower to indicate Rare Earth deposits. Please note that previously those were indicated by Orechids, so there isnt much to them aside from the pun.
 [ADDED] Kilo-Gibbl-O-Meter for more heavy duty Gibbl related sensoring.
 
+Reach Additions:
+[CHANGED] Changed from ForgeGradle to RetroFuturaGradle.
 
 6.17.06:
 [FIXED] Apparently I did something that accidentially fixed the Gibbl-O-Meter when used on Boilers. Apparently it always showed double the Gibbl it was supposed to? I have no Idea what was wrong, but it behaves as intended right now so I am not unfixing it either. Not that I know what or how I fixed it either.

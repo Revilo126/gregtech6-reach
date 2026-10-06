@@ -154,33 +154,33 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 		MinecraftForge.EVENT_BUS.register(this);
 		FMLCommonHandler.instance().bus().register(this);
 	}
-	
+
 	public int addArmor(String aPrefix) {
 		return 0;
 	}
-	
+
 	public EntityPlayer getThePlayer() {
 		return null;
 	}
-	
+
 	public boolean sendUseItemPacket(EntityPlayer aPlayer, World aWorld, ItemStack aStack) {
 		return F;
 	}
-	
+
 	@Override
 	public Object getServerGuiElement(int aGUIID, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ) {
 		TileEntity tTileEntity = WD.te(aWorld, aX, aY, aZ, T);
 		return tTileEntity instanceof ITileEntityGUI ? ((ITileEntityGUI)tTileEntity).getGUIServer(aGUIID, aPlayer) : null;
 	}
-	
+
 	@Override
 	public Object getClientGuiElement(int aGUIID, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ) {
 		TileEntity tTileEntity = WD.te(aWorld, aX, aY, aZ, T);
 		return tTileEntity instanceof ITileEntityGUI ? ((ITileEntityGUI)tTileEntity).getGUIClient(aGUIID, aPlayer) : null;
 	}
-	
+
 	private File mSaveLocation = null;
-	
+
 	/**
 	 * saves Data whenever Save File Location changes or if aForceSave is passed, usually by the minutely Autosave.
 	 */
@@ -188,7 +188,7 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 		boolean tSave = (aForceSave || aSaveLocation == null), tLoad = (mSaveLocation == null);
 		// Did Save Files swap secretly? Can happen in Singleplayer with the popular Forge Monopoly Bug: "Go directly to the Main Menu. Do not enter your World. Do not collect 200 Blocks."
 		if (CODE_CLIENT && aSaveLocation != null && !aSaveLocation.equals(mSaveLocation)) tSave = tLoad = T;
-		
+
 		if (tSave && mSaveLocation != null) {
 			// Only print this if it is not the minutely Autosave.
 			if (aSaveLocation == null) OUT.println("Saving  World! " + mSaveLocation.getName());// else DEB.println("Autosave!      " + mSaveLocation.getName());
@@ -209,23 +209,23 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 		}
 		return tSave || tLoad;
 	}
-	
+
 	@Override
 	public void onProxyBeforeServerStarted(Abstract_Mod aMod, FMLServerStartedEvent aEvent) {
 		SERVER_TIME = 0;
 		MultiTileEntityRegistry.onServerStart();
 	}
-	
+
 	@Override
 	public void onProxyAfterServerStopping(Abstract_Mod aMod, FMLServerStoppingEvent aEvent) {
 		checkSaveLocation(null, T);
 		MultiTileEntityRegistry.onServerStop();
 	}
-	
+
 	@SubscribeEvent(priority = EventPriority.LOWEST) public void onWorldLoad  (WorldEvent.Load   aEvent) {checkSaveLocation(DimensionManager.getCurrentSaveRootDirectory(), F);}
 	//@SubscribeEvent(priority = EventPriority.LOWEST) public void onWorldUnload(WorldEvent.Unload aEvent) {checkSaveLocation(DimensionManager.getCurrentSaveRootDirectory(), F);}
 	//@SubscribeEvent(priority = EventPriority.LOWEST) public void onWorldSave  (WorldEvent.Save   aEvent) {checkSaveLocation(DimensionManager.getCurrentSaveRootDirectory(), F);}
-	
+
 	public  static final List<ITileEntityServerTickPre    > SERVER_TICK_PRE                = new ArrayListNoNulls<>(), SERVER_TICK_PR2  = new ArrayListNoNulls<>();
 	public  static final List<ITileEntityServerTickPost   > SERVER_TICK_POST               = new ArrayListNoNulls<>(), SERVER_TICK_PO2T = new ArrayListNoNulls<>();
 	public  static final List<ITileEntityMobSpawnInhibitor> MOB_SPAWN_INHIBITORS           = new ArrayListNoNulls<>();
@@ -233,32 +233,32 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 	private static       List<IHasWorldAndCoords>           DELAYED_BLOCK_UPDATES_2        = new ArrayListNoNulls<>();
 	public  static       List<ITileEntityScheduledUpdate>   SCHEDULED_TILEENTITY_UPDATES   = new ArrayListNoNulls<>();
 	private static       List<ITileEntityScheduledUpdate>   SCHEDULED_TILEENTITY_UPDATES_2 = new ArrayListNoNulls<>();
-	
-	@SubscribeEvent(priority = EventPriority.LOWEST) 
+
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void onServerTick(ServerTickEvent aEvent) {
 		TOOL_SOUNDS = TOOL_SOUNDS_SETTING;
-		
+
 		// Fixing a Thaumcraft Bug in its Loot Bags.
 		ST.fixBookStacks();
-		
+
 		if (aEvent.side.isServer()) {
 			// Try acquiring the Lock within 10 Milliseconds. Otherwise fuck anyone who locks it up for too long, or any other faulty reason MC doesn't work.
 			try {TICK_LOCK.tryLock(10, TimeUnit.MILLISECONDS);} catch (Throwable e) {e.printStackTrace(ERR);} finally {if (TICK_LOCK.isHeldByCurrentThread()) TICK_LOCK.unlock();}
-			
+
 			// Making sure it is being free'd up in order to prevent exploits or Garbage Collection mishaps.
 			LAST_BROKEN_TILEENTITY.set(null);
-			
+
 			if (aEvent.phase == Phase.START) {
 				SYNC_SECOND = (SERVER_TIME % 20 == 0);
-				
+
 				if (SERVER_TIME++ == 0) {
 					// Initial Save Data check
 					checkSaveLocation(DimensionManager.getCurrentSaveRootDirectory(), F);
-					
+
 					// Unification Stuff
 					HashSetNoNulls<ItemStack> tStacks = new HashSetNoNulls<>(10000);
-					
+
 					if (MD.IC2.mLoaded) try {
 					for (ic2.api.recipe.RecipeOutput tRecipe : ic2.api.recipe.Recipes.cannerBottle        .getRecipes().values()) for (ItemStack tStack : tRecipe.items) tStacks.add(tStack);
 					for (ic2.api.recipe.RecipeOutput tRecipe : ic2.api.recipe.Recipes.centrifuge          .getRecipes().values()) for (ItemStack tStack : tRecipe.items) tStacks.add(tStack);
@@ -271,18 +271,18 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 					for (ic2.api.recipe.RecipeOutput tRecipe : ic2.api.recipe.Recipes.matterAmplifier     .getRecipes().values()) for (ItemStack tStack : tRecipe.items) tStacks.add(tStack);
 					for (ic2.api.recipe.RecipeOutput tRecipe : ic2.api.recipe.Recipes.oreWashing          .getRecipes().values()) for (ItemStack tStack : tRecipe.items) tStacks.add(tStack);
 					} catch(Throwable e) {e.printStackTrace(ERR);}
-					
+
 					if (MD.RC.mLoaded) {
 					try {for (Object  tRecipe : mods.railcraft.api.crafting.RailcraftCraftingManager.blastFurnace  .getRecipes   ()) tStacks.add((ItemStack)UT.Reflection.getFieldContent(tRecipe, "output"));} catch(Throwable e) {e.printStackTrace(ERR);}
 					try {for (Object  tRecipe : mods.railcraft.api.crafting.RailcraftCraftingManager.cokeOven      .getRecipes   ()) tStacks.add((ItemStack)UT.Reflection.getFieldContent(tRecipe, "output"));} catch(Throwable e) {e.printStackTrace(ERR);}
 					try {for (Object  tRecipe : mods.railcraft.api.crafting.RailcraftCraftingManager.rockCrusher   .getRecipes   ()) for (Map.Entry<ItemStack, Float> tEntry : (List<Map.Entry<ItemStack, Float>>)UT.Reflection.getFieldContent(tRecipe, "outputs")) tStacks.add(tEntry.getKey());} catch(Throwable e) {e.printStackTrace(ERR);}
 					try {for (IRecipe tRecipe : mods.railcraft.api.crafting.RailcraftCraftingManager.rollingMachine.getRecipeList()) if (tRecipe != null) tStacks.add(tRecipe.getRecipeOutput());} catch(Throwable e) {e.printStackTrace(ERR);}
 					}
-					
+
 					if (MD.TE.mLoaded && ALWAYS_FALSE) {
 						List<Map> tMaps = new ArrayListNoNulls<>();
 						List<Set> tSets = new ArrayListNoNulls<>();
-						
+
 						for (String tClassName : new String[] {"cofh.thermalexpansion.util.crafting.InsolatorManager", "cofh.thermalexpansion.util.crafting.ChargerManager", "cofh.thermalexpansion.util.crafting.ExtruderManager", "cofh.thermalexpansion.util.crafting.PrecipitatorManager", "cofh.thermalexpansion.util.crafting.TransposerManager", "cofh.thermalexpansion.util.crafting.CrucibleManager", "cofh.thermalexpansion.util.crafting.SmelterManager", "cofh.thermalexpansion.util.crafting.SawmillManager", "cofh.thermalexpansion.util.crafting.PulverizerManager", "cofh.thermalexpansion.util.crafting.FurnaceManager"}) {try {
 							Class tClass = Class.forName(tClassName);
 							Object
@@ -297,7 +297,7 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 							tObject = UT.Reflection.getFieldContent(tClass, "lockSet", T, F);
 							if (tObject instanceof Set) tSets.add((Set)tObject);
 						} catch(Throwable e) {e.printStackTrace(ERR);}}
-						
+
 						for (Map tMap : tMaps) {
 							try {for (Object tCompStack : tMap.keySet()) if (tCompStack instanceof ComparableItem) {
 								ItemStack tStack = OM.get(ST.make(((ComparableItem)tCompStack).item, 1, ((ComparableItem)tCompStack).metadata));
@@ -308,7 +308,7 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 							}} catch(Throwable e) {e.printStackTrace(ERR);}
 							UT.Code.reMap(tMap);
 						}
-						
+
 						for (Set tSet : tSets) {
 							try {for (Object tCompStack : tSet) if (tCompStack instanceof ComparableItem) {
 								ItemStack tStack = OM.get(ST.make(((ComparableItem)tCompStack).item, 1, ((ComparableItem)tCompStack).metadata));
@@ -320,9 +320,9 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 							UT.Code.reMap(tSet);
 						}
 					}
-					
+
 					for (String tLootList : ST.LOOT_TABLES) for (WeightedRandomChestContent tContent : ChestGenHooks.getInfo(tLootList).getItems(RNGSUS)) tStacks.add(tContent.theItemId);
-					
+
 					if (MD.IE.mLoaded) try {
 						for (WeightedRandomChestContent tContent : ((ChestGenHooks)UT.Reflection.getFieldContent("blusunrize.immersiveengineering.common.world.VillageEngineersHouse", "crateContents")).getItems(RNGSUS)) {
 							if (OM.is("ingotAluminium", tContent.theItemId)) {
@@ -334,12 +334,12 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 					} catch(Throwable e) {
 						e.printStackTrace(ERR);
 					}
-					
+
 					for (Object tStack : FurnaceRecipes.smelting().getSmeltingList().values()) tStacks.add((ItemStack)tStack);
-					
+
 					if (MD.EtFu.mLoaded) {
 						boolean tSuccess = F;
-						
+
 						if (!tSuccess) try {
 							Map
 							tMap = ((Map)UT.Reflection.getFieldContent(SmokerRecipes.smelting(), "smeltingList", T, D1));
@@ -347,12 +347,12 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 							tMap = ((Map)UT.Reflection.getFieldContent(BlastFurnaceRecipes.smelting(), "smeltingList", T, D1));
 							if (tMap != null) {for (Object tStack : tMap.values()) tSuccess |= tStacks.add((ItemStack)tStack);}
 						} catch(Throwable e) {if (D1) e.printStackTrace(ERR);}
-						
+
 						if (!tSuccess) ERR.println("Et Futurum Requiem needs to be updated!");
 					}
-					
+
 					for (IRecipe tRecipe : CR.list()) if (tRecipe != null) tStacks.add(tRecipe.getRecipeOutput());
-					
+
 					for (ItemStack tOutput : tStacks) {
 						if (OreDictManager.INSTANCE.isOreDictItem(tOutput)) {
 							ERR.println("GT-ERR-01: @ " + tOutput.getUnlocalizedName() + "   " + tOutput.getDisplayName());
@@ -372,7 +372,7 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 								FMLLog.severe("If it would be possible, then I would have had added the Mod which is causing it to the Message already. But it is not possible.");
 								FMLLog.severe("Sorry, but this Error is serious enough to justify this Wall-O-Text and the partially allcapsed Language.");
 								FMLLog.severe("Also it is a Ban Reason on the IC2-Forums to seriously post this Text. We all know about its existence.");
-								
+
 								tOutput.setStackDisplayName("ERROR!");
 								UT.NBT.setBoolean(UT.NBT.getNBT(tOutput), "gt.err.oredict.output", T);
 							}
@@ -380,7 +380,7 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 							OM.set(tOutput);
 						}
 					}
-					
+
 					// Cleaning up Recipes with Empty OreDict Lists, since they are never craftable.
 					List<IRecipe> tList = CR.list();
 					for (int i = 0; i < tList.size(); i++) {
@@ -405,10 +405,10 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 							}
 						}
 					}
-					
+
 					OreDictManager.INSTANCE.fixStacksizes();
 				}
-				
+
 				for (int i = 0; i < SERVER_TICK_PRE.size(); i++) {
 					ITileEntityServerTickPre tTileEntity = SERVER_TICK_PRE.get(i);
 					if (tTileEntity.isDead()) {
@@ -439,7 +439,7 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 						}
 					}
 				}
-				
+
 				DELAYED_BLOCK_UPDATES_2.clear();
 				List tList = DELAYED_BLOCK_UPDATES_2;
 				DELAYED_BLOCK_UPDATES_2 = DELAYED_BLOCK_UPDATES;
@@ -452,7 +452,7 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 						e.printStackTrace(ERR);
 					}
 				}
-				
+
 				if (SERVER_TIME > 10) {
 					for (ITileEntityScheduledUpdate tTileEntity : SCHEDULED_TILEENTITY_UPDATES_2) if (!tTileEntity.isDead()) {
 						try {
@@ -466,7 +466,7 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 					tList = SCHEDULED_TILEENTITY_UPDATES_2;
 					SCHEDULED_TILEENTITY_UPDATES_2 = SCHEDULED_TILEENTITY_UPDATES;
 					SCHEDULED_TILEENTITY_UPDATES = tList;
-					
+
 					while (!mNewPlayers.isEmpty()) {
 						EntityPlayerMP tPlayer = mNewPlayers.remove(0);
 						NW_API.sendToPlayer(new PacketConfig(), tPlayer);
@@ -474,7 +474,7 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 					}
 				}
 			}
-			
+
 			if (aEvent.phase == Phase.END) {
 				for (int i = 0; i < SERVER_TICK_POST.size(); i++) {
 					ITileEntityServerTickPost tTileEntity = SERVER_TICK_POST.get(i);
@@ -491,7 +491,7 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 						}
 					}
 				}
-				
+
 				for (int i = 0; i < SERVER_TICK_PO2T.size(); i++) {
 					ITileEntityServerTickPost tTileEntity = SERVER_TICK_PO2T.get(i);
 					if (tTileEntity.isDead()) {
@@ -507,28 +507,28 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 						}
 					}
 				}
-				
+
 				EntityFoodTracker.tick();
-				
+
 				if (SERVER_TIME % 1200 == 0) checkSaveLocation(DimensionManager.getCurrentSaveRootDirectory(), T);
-				
+
 				if (TICK_LOCK.isHeldByCurrentThread()) TICK_LOCK.unlock();
 			}
 		}
 	}
-	
-	@SubscribeEvent(priority = EventPriority.LOWEST) 
+
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onLivingUpdate(LivingUpdateEvent aEvent) {
 		int
 		tX = UT.Code.roundDown(aEvent.entityLiving.posX),
 		tY = UT.Code.roundDown(aEvent.entityLiving.posY + aEvent.entityLiving.getEyeHeight()),
 		tZ = UT.Code.roundDown(aEvent.entityLiving.posZ);
-		
+
 		Block tBlock = aEvent.entityLiving.worldObj.getBlock(tX, tY, tZ);
 		if (tBlock instanceof IBlockOnHeadInside) ((IBlockOnHeadInside)tBlock).onHeadInside(aEvent.entityLiving, aEvent.entityLiving.worldObj, tX, tY, tZ);
-		
+
 		tY = UT.Code.roundDown(aEvent.entityLiving.boundingBox.minY-0.001F);
-		
+
 		if (aEvent.entityLiving instanceof EntityPlayer) {
 			if (BlocksGT.Paths != null && !aEvent.entityLiving.worldObj.isRemote) {
 				Block tPath = IL.EtFu_Path.block();
@@ -537,7 +537,7 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 				}
 			}
 		}
-		
+
 		if (aEvent.entityLiving.onGround) {
 			tBlock = aEvent.entityLiving.worldObj.getBlock(tX, tY, tZ);
 			if (!WD.hasCollide(aEvent.entityLiving.worldObj, tX, tY, tZ, tBlock)) {
@@ -560,7 +560,7 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 					}
 				}
 			}
-			
+
 			// walk over special Blocks.
 			if (tBlock instanceof IBlockOnWalkOver) ((IBlockOnWalkOver)tBlock).onWalkOver(aEvent.entityLiving, aEvent.entityLiving.worldObj, tX, tY, tZ);
 			// Only Serverside for this Stuff.
@@ -596,14 +596,14 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 			}
 		}
 	}
-	
-	@SubscribeEvent(priority = EventPriority.LOWEST) 
+
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onWorldTick(WorldTickEvent aEvent) {
 		TOOL_SOUNDS = TOOL_SOUNDS_SETTING;
-		
+
 		if (aEvent.side.isServer() && aEvent.phase == Phase.END) {
 			ArrayListNoNulls<EntityXPOrb> tOrbs = (XP_ORB_COMBINING && SERVER_TIME % 40 == 31 ? new ArrayListNoNulls<EntityXPOrb>(128) : null);
-			
+
 			for (int i = 0; i < aEvent.world.loadedEntityList.size(); i++) {
 				Entity aEntity = (Entity)aEvent.world.loadedEntityList.get(i);
 				if (aEntity == null || aEntity.isDead) continue;
@@ -614,13 +614,13 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 					if (ST.valid(aStack)) {
 						ItemStack rStack = ST.copy(aStack);
 						boolean tBreak = F, tFireProof = F;
-						
+
 						// TODO make a case for Armor too whenever I decide to even add Armor.
 						if (rStack.getItem() instanceof MultiItemTool) {
 							if (MultiItemTool.getPrimaryMaterial  (aStack).contains(TD.Properties.UNBURNABLE)) tFireProof = T;
 							if (MultiItemTool.getSecondaryMaterial(aStack).contains(TD.Properties.UNBURNABLE)) tFireProof = T;
 						}
-						
+
 						OreDictItemData aData = OM.anydata_(rStack);
 						if (aData != null) {
 							if (aData.validPrefix()) for (IOreDictListenerItem tListener : aData.mPrefix.mListenersItem) {
@@ -636,7 +636,7 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 								}
 							}
 						}
-						
+
 						if (rStack == null || rStack.stackSize <= 0) {
 							((EntityItem)aEntity).setEntityItemStack(NI);
 							((EntityItem)aEntity).setDead();
@@ -644,7 +644,7 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 							((EntityItem)aEntity).setEntityItemStack(rStack);
 							((EntityItem)aEntity).delayBeforeCanPickup = 40;
 						}
-						
+
 						if (!aEntity.isDead && aEntity.isBurning() && (tBreak || (tFireProof && !MD.MC.owns(rStack)))) {
 							UT.Reflection.setField(EntityItem.class, aEntity, "health", 250, F);
 							UT.Reflection.setField(EntityItem.class, aEntity, "field_70291_e", 250, F);
@@ -661,7 +661,7 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 					}
 				}
 			}
-			
+
 			if (tOrbs != null && tOrbs.size() > 32) for (EntityXPOrb aOrb : tOrbs) {
 				if (aOrb.xpValue >= Short.MAX_VALUE) continue;
 				if (aOrb.xpValue <= 0) {aOrb.xpValue = 0; aOrb.setDead(); continue;}
@@ -678,7 +678,7 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 					break;
 				}
 			}
-			
+
 			if (SERVER_TIME % 20 == 1) {
 				for (int i = 0; i < aEvent.world.loadedTileEntityList.size(); i++) {
 					TileEntity aTileEntity = (TileEntity)aEvent.world.loadedTileEntityList.get(i);
@@ -687,18 +687,18 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 			}
 		}
 	}
-	
-	@SubscribeEvent(priority = EventPriority.LOWEST) 
+
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onPlayerItemPickupEvent(cpw.mods.fml.common.gameevent.PlayerEvent.ItemPickupEvent aEvent) {
 		ST.check(aEvent.player, aEvent.pickedUp.getEntityItem());
 	}
-	
+
 	private int BEAR_INVENTORY_COOL_DOWN = 5;
-	
-	@SubscribeEvent(priority = EventPriority.LOWEST) 
+
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onPlayerTickEvent(PlayerTickEvent aEvent) {
 		if (!aEvent.player.isDead && aEvent.phase == Phase.END) {
-			
+
 		////if (aEvent.player.worldObj.provider instanceof WorldProviderTwilightForest) {
 		////    Object tChunkProvider = ((WorldProviderTwilightForest)aEvent.player.worldObj.provider).getChunkProvider();
 		////    if (tChunkProvider != null) {
@@ -714,14 +714,14 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 		////        }
 		////    }
 		////}
-			
+
 			for (Object tPotion : aEvent.player.getActivePotionEffects()) {
 				if (tPotion instanceof PotionEffect && ((PotionEffect)tPotion).getDuration() <= 0) {
 					aEvent.player.removePotionEffect(((PotionEffect)tPotion).getPotionID());
 					break;
 				}
 			}
-			
+
 			if (aEvent.side.isServer()) {
 				/** This cannot work the way I hoped it would, would despawn way too few mobs...
 				if (SERVER_TIME % 100 == 0) {
@@ -764,7 +764,7 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 					if (ADVENTURE_MODE_KIT) {
 						if (MD.GT.mLoaded) {
 							UT.Entities.sendchat(aEvent.player, CHAT_GREG + "Thank you for choosing the GregTech-6 Adventure Mode Starter Kit.");
-							
+
 							MultiTileEntityRegistry tRegistry = MultiTileEntityRegistry.getRegistry("gt.multitileentity");
 							ST.drop(aEvent.player, tRegistry == null ? IL.Bottle_Purple_Drink.get(6) : tRegistry.getItem(8762, 1, UT.NBT.make(NBT_INV_LIST, UT.NBT.makeInv(IL.Bottle_Purple_Drink.get(1), IL.Bottle_Empty.get(1), IL.Bottle_Purple_Drink.get(1), IL.Bottle_Purple_Drink.get(1), IL.Bottle_Empty.get(1), IL.Bottle_Purple_Drink.get(1), IL.Bottle_Purple_Drink.get(1), IL.Bottle_Purple_Drink.get(1), IL.Bottle_Empty.get(1)))));
 							ST.drop(aEvent.player, IL.Grass_Dry.get(9));
@@ -784,8 +784,8 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 						}
 					}
 				}
-				
-				
+
+
 				final boolean tHungerEffect = (HUNGER_BY_INVENTORY_WEIGHT && aEvent.player.ticksExisted % 2400 == 1200), tBetweenlands = WD.dimBTL(aEvent.player.worldObj.provider);//, tCrazyJ1984 = "CrazyJ1984".equalsIgnoreCase(aEvent.player.getCommandSenderName());
 				if (aEvent.player.ticksExisted % 120 == 0) {
 					ItemStack tStack;
@@ -837,7 +837,7 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 							if (tStack.hasTagCompound() && tStack.getTagCompound().hasNoTags()) tStack.setTagCompound(null);
 						}
 					}
-					
+
 					// This Code is to tell Bear and all the people around him that he should clean up his always cluttered Inventory.
 					if ("Bear989Sr".equalsIgnoreCase(aEvent.player.getCommandSenderName())) {
 						if (tCraponite > 0) {
@@ -893,7 +893,7 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 							}
 						}
 					}
-					
+
 					for (int i = 0; i < 4; i++) if (ST.valid(tStack = aEvent.player.inventory.armorInventory[i])) {
 						// The Better Storage Backpack would dupe Items when destroyed while worn, so this will prevent that.
 						// A Backpack already is hindrance enough if you want full Armor, so Durability should not matter here anyways.
@@ -901,7 +901,7 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 						if (MD.BTRS.mLoaded && (IL.BTRS_Backpack.equal(tStack, T, T) || IL.BTRS_Thaumpack.equal(tStack, T, T) || IL.BTRS_Enderpack.equal(tStack, T, T))) {
 							ST.meta(tStack, 0);
 						}
-						
+
 						if (!UT.Entities.isInvincible(aEvent.player)) {
 							UT.Entities.applyRadioactivity(aEvent.player, UT.Entities.getRadioactivityLevel(tStack), tStack.stackSize);
 							float tHeat = UT.Entities.getHeatDamageFromItem(tStack);
@@ -914,8 +914,8 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 			}
 		}
 	}
-	
-	@SubscribeEvent(priority = EventPriority.LOWEST) 
+
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onChunkWatchEvent(ChunkWatchEvent.Watch aEvent) {
 		Chunk tChunk = aEvent.player.worldObj.getChunkFromChunkCoords(aEvent.chunk.chunkXPos, aEvent.chunk.chunkZPos);
 		if (tChunk != null && tChunk.isTerrainPopulated && tChunk.chunkTileEntityMap != null && tChunk.chunkTileEntityMap.size() > 0) {
@@ -932,8 +932,8 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 			}
 		}
 	}
-	
-	@SubscribeEvent(priority = EventPriority.LOWEST) 
+
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onPlayerDestroyItem(PlayerDestroyItemEvent aEvent) {
 		// Uhh, why is this null? Must be a Bug somewhere else.
 		if (aEvent.original == null) return;
@@ -953,11 +953,11 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 				UT.Entities.applyPotion(aEvent.entityPlayer, Potion.digSlowdown, 1200, 2, F);
 			}
 		}
-		// 
+		//
 		ItemStack[] tInv = aEvent.entityPlayer.inventory.mainInventory;
 		// Only work on Vanilla-Sized Player Inventories!
 		if (tInv.length != 36) return;
-		// 
+		//
 		int tSlot = aEvent.entityPlayer.inventory.currentItem;
 		// There cant be any Inventory Row above this one.
 		if (tSlot >= 27) return;
@@ -992,8 +992,8 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 		tInv[tSlot] = tInv[tSlot+ 9]; tInv[tSlot+ 9] = null; ST.update(aEvent.entityPlayer); return;}
 		return;
 	}
-	
-	@SubscribeEvent(priority = EventPriority.LOWEST) 
+
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onItemUseFinish(PlayerUseItemEvent.Finish aEvent) {
 		int[] tStats = FoodsGT.get(aEvent.item);
 		if (tStats != null) {
@@ -1007,13 +1007,13 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 				if (tStats.length > 5 && tStats[5] != 0) tTracker.changeRadiation  (tStats[5]);
 			}
 		}
-		
+
 		NBTTagCompound tNBT = aEvent.item.getTagCompound();
 		if (tNBT != null && tNBT.hasKey(NBT_EFFECTS)) {
 			tNBT = tNBT.getCompoundTag(NBT_EFFECTS);
 			if (RNGSUS.nextInt(100) < tNBT.getInteger("chance")) UT.Entities.applyPotion(aEvent.entityPlayer, tNBT.getInteger("id"), tNBT.getInteger("time"), tNBT.getInteger("lvl"), F);
 		}
-		
+
 		if (aEvent.item.getItem() == Items.apple) {
 			if (IL.GrC_Applecore.exists()) {
 				if (aEvent.result == null) aEvent.result = IL.GrC_Applecore.get(1); else ST.give(aEvent.entityPlayer, IL.GrC_Applecore.get(1), F);
@@ -1022,21 +1022,21 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 			}
 		}
 	}
-	
+
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onPlayerInteraction(PlayerInteractEvent aEvent) {
 		if (aEvent.entityPlayer == null || aEvent.entityPlayer.worldObj == null || aEvent.action == null || aEvent.world.provider == null) return;
-		
+
 		PLAYER_LAST_CLICKED.put(aEvent.entityPlayer, new ChunkCoordinates(aEvent.x, aEvent.y, aEvent.z));
-		
+
 		// If a Player rightclicks something, then that Chunk gotta be marked as modified, even if nothing happens.
 		// There has been plenty of Bugs in various Mods, because of forgetting to mark things.
 		WD.mark(aEvent.world, aEvent.x, aEvent.z);
-		
+
 		ItemStack aStack = aEvent.entityPlayer.inventory.getCurrentItem();
 		Block aBlock = WD.block(aEvent.world, aEvent.x, aEvent.y, aEvent.z);
 		TileEntity aTileEntity = aEvent.world.getTileEntity(aEvent.x, aEvent.y, aEvent.z);
-		
+
 		if (aEvent.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
 			// Fixing a Vanilla Dupe Bug with stacked Music Discs and the Jukebox.
 			if (aTileEntity instanceof TileEntityJukebox) {
@@ -1200,7 +1200,7 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 				}
 			}
 		}
-		
+
 		if (aEvent.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK || aEvent.action == PlayerInteractEvent.Action.RIGHT_CLICK_AIR) {
 			if (ST.valid(aStack)) {
 				// Make sure that shelvable Items don't do a Rightclick Action instead of being shelved.
@@ -1229,13 +1229,13 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 			}
 		}
 	}
-	
-	@SubscribeEvent(priority = EventPriority.LOWEST) 
+
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onUseHoeEvent(net.minecraftforge.event.entity.player.UseHoeEvent aEvent) {
 		if (aEvent.world.getBlock(aEvent.x, aEvent.y, aEvent.z) == Blocks.dirt && aEvent.world.getBlockMetadata(aEvent.x, aEvent.y, aEvent.z) != 0) aEvent.setCanceled(T);
 	}
-	
-	@SubscribeEvent(priority = EventPriority.LOWEST) 
+
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	@SuppressWarnings("unlikely-arg-type")
 	public void onBlockBreakSpeedEvent(PlayerEvent.BreakSpeed aEvent) {
 		if (aEvent.newSpeed > 0) {
@@ -1246,9 +1246,9 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 					UT.Reflection.setField(aEvent, "originalSpeed", aEvent.newSpeed = ((MultiItemTool)aStack.getItem()).onBlockBreakSpeedEvent(aEvent.newSpeed, aStack, aEvent.entityPlayer, aEvent.block, aEvent.x, aEvent.y, aEvent.z, (byte)aEvent.metadata, aEvent));
 				}
 			}
-			
+
 			ItemStackContainer tBlock = new ItemStackContainer(aEvent.block, 1, aEvent.metadata);
-			
+
 			if (OM.prefixcontains(ST.make(aEvent.block, 1, aEvent.metadata), TD.Prefix.ORE)) {
 				// Aether does something stupid so Reflection it is
 				UT.Reflection.setField(aEvent, "originalSpeed", aEvent.newSpeed /= HARDNESS_MULTIPLIER_ORES);
@@ -1273,35 +1273,35 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 			}
 		}
 	}
-	
-	@SubscribeEvent(priority = EventPriority.LOWEST) 
+
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onBlockBreakingEvent(BlockEvent.BreakEvent aEvent) {
 		if (aEvent.block instanceof IPrefixBlock && EnchantmentHelper.getSilkTouchModifier(aEvent.getPlayer())) aEvent.setExpToDrop(0);
 	}
-	
-	@SubscribeEvent(priority = EventPriority.LOWEST) 
+
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onBlockHarvestingEvent(BlockEvent.HarvestDropsEvent aEvent) {
 		Iterator<ItemStack> aDrops = aEvent.drops.iterator();
 		Block aBlock = (aEvent.block == Blocks.lit_redstone_ore ? Blocks.redstone_ore : aEvent.block == Blocks.lit_redstone_lamp ? Blocks.redstone_lamp : aEvent.block == BlocksGT.EtFu_Deepslate_Lit_Redstone_Ore ? BlocksGT.EtFu_Deepslate_Redstone_Ore : aEvent.block);
-		
+
 		while (aDrops.hasNext()) {
 			ItemStack aDrop = aDrops.next();
 			if (ST.invalid(aDrop) || ItemsGT.ILLEGAL_DROPS.contains(aDrop, T)) {aDrops.remove(); continue;}
 			if (ST.item_(aDrop) == Items.gold_nugget) ST.meta_(aDrop, 0);
 			if (FORCE_GRAVEL_NO_FLINT && aBlock == Blocks.gravel && ST.item_(aDrop) == Items.flint) ST.set(aDrop, ST.make(Blocks.gravel, 1, 0), T, F);
 		}
-		
+
 		if (aBlock == null) return;
-		
+
 		if (aBlock == Blocks.dirt && aEvent.blockMetadata == 1) for (int i = 0, j = aEvent.drops.size(); i < j; i++) if (ST.block(aEvent.drops.get(0)) == Blocks.dirt) {
 			aEvent.drops.set(i, ST.make(Blocks.dirt, aEvent.drops.get(i).stackSize, 1));
 		}
-		
+
 		if (IL.TF_Mushgloom_Huge.equal(aBlock)) {
 			aEvent.drops.clear();
 			aEvent.drops.add(aEvent.isSilkTouching ? IL.TF_Mushgloom_Huge.get(1) : IL.TF_Mushgloom.get(UT.Code.bind(1, 4, RNGSUS.nextInt(3) + RNGSUS.nextInt(1+aEvent.fortuneLevel))));
 		}
-		
+
 		if (aEvent.harvester != null) {
 			if (FAST_LEAF_DECAY) WD.leafdecay(aEvent.world, aEvent.x, aEvent.y, aEvent.z, aBlock, F, F);
 			ItemStack aTool = aEvent.harvester.getCurrentEquippedItem();
@@ -1309,16 +1309,16 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 				boolean
 				tFireAspect = (UT.NBT.getEnchantmentLevel(Enchantment.fireAspect, aTool) >= 3),
 				tCanCollect = (ST.item_(aTool) instanceof MultiItemTool && ((MultiItemTool)ST.item_(aTool)).canCollectDropsDirectly(aTool, aBlock, (byte)aEvent.blockMetadata));
-				
+
 				if (ST.item_(aTool) instanceof MultiItemTool) {
 					((MultiItemTool)ST.item_(aTool)).onHarvestBlockEvent(aEvent.drops, aTool, aEvent.harvester, aBlock, aEvent.x, aEvent.y, aEvent.z, (byte)aEvent.blockMetadata, aEvent.fortuneLevel, aEvent.isSilkTouching, aEvent);
 				}
-				
+
 				for (ItemStack tDrop : aEvent.drops) {
 					ItemStack tTarget = (aEvent.isSilkTouching ? BlocksGT.blockToSilk : BlocksGT.blockToDrop).get(tDrop);
 					if (ST.valid(tTarget)) OM.set(ST.set(tDrop, tTarget, F, F)); else OM.set(tDrop);
 				}
-				
+
 				if (tFireAspect) for (ItemStack tDrop : aEvent.drops) {
 					ItemStack tTarget = RM.get_smelting(tDrop);
 					if (ST.valid(tTarget)) {
@@ -1338,7 +1338,7 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 						}
 					}
 				}
-				
+
 				if (tCanCollect && !aEvent.drops.isEmpty()) {
 					boolean aCollectSound = T;
 					aDrops = aEvent.drops.iterator();
@@ -1371,7 +1371,7 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 			ST.denull(aEvent.harvester);
 		}
 	}
-	
+
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onEntitySpawningEvent(EntityJoinWorldEvent aEvent) {
 		if (aEvent.entity instanceof EntityItem && !aEvent.entity.worldObj.isRemote) {
@@ -1381,8 +1381,8 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 				if (ST.meta_(aStack) == W || aItem == Items.gold_nugget) ST.meta(aStack, 0);
 				if (ST.meta_(aStack) == 0 && aItem == IL.TF_Mushgloom.item()) ST.meta(aStack, 9);
 				// Check if this is likely a badly implemented Mob Drop from a Mo'Creatures Mob.
-				try {if (null != aEvent.entity.worldObj.findNearestEntityWithinAABB(Class.forName("drzhark.mocreatures.entity.IMoCEntity"), aEvent.entity.boundingBox.expand(0.5,1.0,0.5), aEvent.entity)) {
-					// Replace stupid Wooden and Stone Tools that clutter up Mob Farms for no reason, but only if nonplayerkill.
+				try {if (null != aEvent.entity.worldObj.findNearestEntityWithinAABB((Class<? extends Entity>)Class.forName("drzhark.mocreatures.entity.IMoCEntity"), aEvent.entity.boundingBox.expand(0.5,1.0,0.5), aEvent.entity)) {
+                    // Replace stupid Wooden and Stone Tools that clutter up Mob Farms for no reason, but only if nonplayerkill.
 					if (aItem == Items.wooden_sword || aItem == Items.wooden_pickaxe || aItem == Items.wooden_shovel || aItem == Items.wooden_axe || aItem == Items.wooden_hoe) {
 						ST.set(aStack, IL.Stick.get(1));
 					} else if (aItem == Items.stone_sword || aItem == Items.stone_pickaxe || aItem == Items.stone_shovel || aItem == Items.stone_axe || aItem == Items.stone_hoe) {
@@ -1408,14 +1408,14 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 			}
 		}
 	}
-	
+
 	public static List<EntityPlayerMP> mNewPlayers = new ArrayListNoNulls<>();
-	
+
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onLivingDeath(LivingDeathEvent aEvent) {
 		if (aEvent.entityLiving instanceof EntityPlayerMP) NW_API.sendToPlayer(new PacketDeathPoint(UT.Code.roundDown(aEvent.entityLiving.posX), UT.Code.roundDown(aEvent.entityLiving.posY), UT.Code.roundDown(aEvent.entityLiving.posZ)), (EntityPlayerMP)aEvent.entityLiving);
 	}
-	
+
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onLoginEvent(cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent aEvent) {
 		if (DISABLE_ALL_IC2_COMPRESSOR_RECIPES) ic2.api.recipe.Recipes.compressor.getRecipes().clear();
@@ -1423,11 +1423,11 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 		if (DISABLE_ALL_IC2_MACERATOR_RECIPES ) ic2.api.recipe.Recipes.macerator .getRecipes().clear();
 		if (DISABLE_ALL_IC2_OREWASHER_RECIPES ) ic2.api.recipe.Recipes.oreWashing.getRecipes().clear();
 		if (DISABLE_ALL_IC2_CENTRIFUGE_RECIPES) ic2.api.recipe.Recipes.centrifuge.getRecipes().clear();
-		
+
 		if (aEvent.player.worldObj.isRemote) return;
 		if (aEvent.player instanceof EntityPlayerMP) mNewPlayers.add((EntityPlayerMP)aEvent.player);
 	}
-	
+
 	@Override
 	public void generate(Random aRandom, int aChunkX, int aChunkZ, World aWorld, IChunkProvider aChunkGenerator, IChunkProvider aChunkProvider) {
 		GT6WorldGenerator.generate(aWorld, aChunkX << 4, aChunkZ << 4, F);
@@ -1438,7 +1438,7 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 		WorldGeneratorGT6.generate(aEvent.world, aEvent.chunkX << 4, aEvent.chunkZ << 4, F);
 	}
 	*/
-	
+
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onItemExpireEvent(ItemExpireEvent aEvent) {
 		if (aEvent.entity.worldObj.isRemote) return;
@@ -1480,16 +1480,16 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 			return;
 		}
 	}
-	
+
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onCheckSpawnEvent(LivingSpawnEvent.CheckSpawn aEvent) {
 		if (aEvent.getResult() == Result.DENY) return;
 		Class<? extends EntityLivingBase> aMobClass = aEvent.entityLiving.getClass();
 		World aWorld = aEvent.world;
 		int aX = UT.Code.roundDown(aEvent.x), aY = (int)UT.Code.bind(0, aWorld.getHeight(), UT.Code.roundDown(aEvent.y)), aZ = UT.Code.roundDown(aEvent.z);
-		
+
 		if (SPAWN_NO_BATS && aMobClass == EntityBat.class && aWorld.getBlock(aX, aY-2, aZ) != Blocks.stone && aWorld.getBlock(aX, aY+2, aZ) != Blocks.stone) {aEvent.setResult(Result.DENY); return;}
-		
+
 		if (SPAWN_HOSTILES_ONLY_IN_DARKNESS && WD.dimOverworldLike(aWorld)) try {
 			Chunk tChunk = aWorld.getChunkFromBlockCoords(aX, aZ);
 			if (tChunk != null && tChunk.getBlockStorageArray() != null && tChunk.getBlockStorageArray()[aY >> 4] != null && tChunk.getBlockStorageArray()[aY >> 4].getExtBlocklightValue(aX & 15, aY & 15, aZ & 15) > 0) {
@@ -1501,7 +1501,7 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 				if (MD.EtFu.mLoaded) if (aEvent.entityLiving instanceof EntityZombieVillager || aEvent.entityLiving instanceof EntityStray || aEvent.entityLiving instanceof EntityHusk) {aEvent.setResult(Result.DENY); return;}
 			}
 		} catch(Throwable e) {e.printStackTrace(ERR);}
-		
+
 		if (aWorld.provider.dimensionId == 0 && aY >= WD.waterLevel(aWorld) - 16) {
 			if (GENERATE_BIOMES) {
 				if (UT.Code.inside(-96,  95, aX) && UT.Code.inside(-96,  95, aZ)) {aEvent.setResult(Result.DENY); return;}
@@ -1511,9 +1511,9 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 			if (GENERATE_STREETS && (UT.Code.inside(-48, 48, aX) || UT.Code.inside(-48, 48, aZ))) {aEvent.setResult(Result.DENY); return;}
 			if (SPAWN_ZONE_MOB_PROTECTION && UT.Code.inside(-144, 144, aX-aWorld.getWorldInfo().getSpawnX()) && UT.Code.inside(-144, 144, aZ-aWorld.getWorldInfo().getSpawnZ()) && WD.opq(aWorld, aX, 0, aZ, F, F)) {aEvent.setResult(Result.DENY); return;}
 		}
-		
+
 		//if (aEvent.entity instanceof EntityMob && !(aEvent.entity instanceof IBossDisplayData) && ((EntityMob)aEvent.entity).getCanSpawnHere()) mMobsToFastDespawn.add((EntityLiving)aEvent.entityLiving);
-		
+
 		for (int i = 0; i < MOB_SPAWN_INHIBITORS.size(); i++) {
 			ITileEntityMobSpawnInhibitor tTileEntity = MOB_SPAWN_INHIBITORS.get(i);
 			if (tTileEntity.isDead()) {
@@ -1528,14 +1528,14 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 			}
 		}
 	}
-	
+
 	//public static List<EntityLiving> mMobsToFastDespawn = new ArrayListNoNulls<>();
-	
+
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onEntityConstructingEvent(EntityConstructing aEvent) {
 		if (Abstract_Mod.sFinalized >= Abstract_Mod.sModCountUsingGTAPI && aEvent.entity instanceof EntityPlayer) EntityFoodTracker.add((EntityPlayer)aEvent.entity);
 	}
-	
+
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onArrowNockEvent(ArrowNockEvent aEvent) {
 		if (!aEvent.isCanceled() && ST.valid(aEvent.result) && ST.projectile(aEvent.entityPlayer.inventory, TD.Projectiles.ARROW) != null) {
@@ -1543,21 +1543,21 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 			aEvent.setCanceled(T);
 		}
 	}
-	
+
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onArrowLooseEvent(ArrowLooseEvent aEvent) {
 		ItemStack aArrow = ST.projectile(aEvent.entityPlayer, TD.Projectiles.ARROW);
 		if (!aEvent.isCanceled() && ST.valid(aEvent.bow) && aArrow != null && aEvent.bow.getItem() instanceof ItemBow) {
 			float tSpeed = aEvent.charge / 20.0F;
 			tSpeed = (tSpeed * tSpeed + tSpeed * 2.0F) / 3.0F;
-			
+
 			if (tSpeed < 0.1) return;
 			if (tSpeed > 1.0) tSpeed = 1.0F;
-			
+
 			EntityProjectile tArrowEntity = ((IItemProjectile)aArrow.getItem()).getProjectile(TD.Projectiles.ARROW, aArrow, aEvent.entityPlayer.worldObj, aEvent.entityPlayer, tSpeed * 2.0F);
-			
+
 			if (tSpeed >= 1.0F) tArrowEntity.setIsCritical(T);
-			
+
 			int
 			tLevel = UT.NBT.getEnchantmentLevel(Enchantment.power, aEvent.bow);
 			if (tLevel > 0) tArrowEntity.setDamage(tArrowEntity.getDamage() + tLevel * 0.5D + 0.5D);
@@ -1565,22 +1565,22 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 			if (tLevel > 0) tArrowEntity.setKnockbackStrength(tLevel);
 			tLevel = UT.NBT.getEnchantmentLevel(Enchantment.flame, aEvent.bow);
 			if (tLevel > 0) tArrowEntity.setFire(tLevel * 100);
-			
+
 			aEvent.bow.damageItem(1, aEvent.entityPlayer);
 			aEvent.bow.getItem();
 			aEvent.entityPlayer.worldObj.playSoundAtEntity(aEvent.entityPlayer, "random.bow", 1.0F, 1.0F / (RNGSUS.nextFloat() * 0.4F + 1.2F) + tSpeed * 0.5F);
-			
+
 			tArrowEntity.canBePickedUp = 1;
-			
+
 			if (!UT.Entities.hasInfiniteItems(aEvent.entityPlayer)) aArrow.stackSize--;
 			if (aArrow.stackSize == 0) ST.denull(aEvent.entityPlayer);
-			
+
 			if (!aEvent.entityPlayer.worldObj.isRemote) aEvent.entityPlayer.worldObj.spawnEntityInWorld(tArrowEntity);
-			
+
 			aEvent.setCanceled(T);
 		}
 	}
-	
+
 	@Override
 	public int getBurnTime(ItemStack aFuel) {
 		if (ST.invalid(aFuel) || FL.getFluid(aFuel, T) != null) return 0;
@@ -1602,7 +1602,7 @@ public abstract class GT_API_Proxy extends Abstract_Proxy implements IGuiHandler
 			if (OD.itemResin   .is_(aFuel      )) return     TICKS_PER_SMELT / 2;
 			if (IL.TF_Sapling.equal(aFuel, T, T)) return     TICKS_PER_SMELT / 2;
 		}
-		
+
 		OreDictItemData tData = OM.anydata_(aFuel);
 		if (tData != null && (tData.mFurnaceFuel || rFuelValue != 0)) {
 			long tBurnTime = 0;
