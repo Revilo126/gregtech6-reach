@@ -48,6 +48,8 @@ import gregapi.util.OM;
 import gregapi.util.ST;
 import gregapi.util.UT;
 import gregapi.util.WD;
+import multihelper.structure.Definition;
+import multihelper.tile.multiblock.TileEntityBase10MultiBlockBaseMH;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -78,15 +80,15 @@ public class MultiTileEntityCrucible extends TileEntityBase10MultiBlockBase impl
 	public static int GAS_RANGE = 5, FLAME_RANGE = 5;
 	public static long MAX_AMOUNT = 16*3*3*3*U, KG_PER_ENERGY = 100;
 	public static double HEAT_RESISTANCE_BONUS = 1.10;
-	
+
 	protected boolean mAcidProof = F, mMeltDown = F;
 	protected byte mDisplayedHeight = 0, mCooldown = 100;
 	protected short mDisplayedFluid = -1;
 	protected long mEnergy = 0, mTemperature = DEF_ENV_TEMP, oTemperature = 0;
 	protected List<OreDictMaterialStack> mContent = new ArrayListNoNulls<>();
-	
+
 	public short mWalls = 18002;
-	
+
 	@Override
 	public void readFromNBT2(NBTTagCompound aNBT) {
 		super.readFromNBT2(aNBT);
@@ -98,7 +100,7 @@ public class MultiTileEntityCrucible extends TileEntityBase10MultiBlockBase impl
 		mContent = OreDictMaterialStack.loadList(NBT_MATERIALS, aNBT);
 		mMeltDown = (mTemperature+100 > getTemperatureMax(SIDE_ANY));
 	}
-	
+
 	@Override
 	public void writeToNBT2(NBTTagCompound aNBT) {
 		super.writeToNBT2(aNBT);
@@ -107,34 +109,34 @@ public class MultiTileEntityCrucible extends TileEntityBase10MultiBlockBase impl
 		UT.NBT.setNumber(aNBT, NBT_TEMPERATURE+".old", oTemperature);
 		OreDictMaterialStack.saveList(NBT_MATERIALS, aNBT, mContent);
 	}
-	
+
 	@Override
 	public boolean checkStructure2(ChunkCoordinates aCoordinates, Entity aPlayer, IInventory aInventory) {
 		boolean tSuccess = T;
-		
+
 		if (getAir(xCoord, yCoord+1, zCoord)) worldObj.setBlockToAir(xCoord, yCoord+1, zCoord); else tSuccess = F;
 		if (getAir(xCoord, yCoord+2, zCoord)) worldObj.setBlockToAir(xCoord, yCoord+2, zCoord); else tSuccess = F;
-		
+
 		for (int i = -1; i < 2; i++) for (int j = -1; j < 2; j++) if (i != 0 || j != 0) {
 			if (!ITileEntityMultiBlockController.Util.checkAndSetTargetOffset(this, i, 0, j, mWalls, getMultiTileEntityRegistryID(), 0, MultiTileEntityMultiBlockPart.ONLY_ENERGY_IN , aCoordinates, aPlayer, aInventory)) tSuccess = F;
 			if (!ITileEntityMultiBlockController.Util.checkAndSetTargetOffset(this, i, 1, j, mWalls, getMultiTileEntityRegistryID(), 0, MultiTileEntityMultiBlockPart.ONLY_CRUCIBLE  , aCoordinates, aPlayer, aInventory)) tSuccess = F;
 			if (!ITileEntityMultiBlockController.Util.checkAndSetTargetOffset(this, i, 2, j, mWalls, getMultiTileEntityRegistryID(), 0, MultiTileEntityMultiBlockPart.ONLY_ITEM_FLUID, aCoordinates, aPlayer, aInventory)) tSuccess = F;
 		}
-		
+
 		if (tSuccess) for (int i = -1; i < 2; i++) for (int j = -1; j < 2; j++) if (i != 0 || j != 0) {
 			if (!ITileEntityMultiBlockController.Util.checkAndSetTargetOffset(this, i, 0, j, mWalls, getMultiTileEntityRegistryID(), 4, MultiTileEntityMultiBlockPart.ONLY_ENERGY_IN , aCoordinates, aPlayer, aInventory)) tSuccess = F;
 			if (!ITileEntityMultiBlockController.Util.checkAndSetTargetOffset(this, i, 1, j, mWalls, getMultiTileEntityRegistryID(), 4, MultiTileEntityMultiBlockPart.ONLY_CRUCIBLE  , aCoordinates, aPlayer, aInventory)) tSuccess = F;
 			if (!ITileEntityMultiBlockController.Util.checkAndSetTargetOffset(this, i, 2, j, mWalls, getMultiTileEntityRegistryID(), 4, MultiTileEntityMultiBlockPart.ONLY_ITEM_FLUID, aCoordinates, aPlayer, aInventory)) tSuccess = F;
 		}
-		
+
 		return tSuccess;
 	}
-	
-	@Override
+
+    @Override
 	public boolean isInsideStructure(int aX, int aY, int aZ) {
 		return aX >= xCoord - 1 && aY >= yCoord && aZ >= zCoord - 1 && aX <= xCoord + 1 && aY <= yCoord + 2 && aZ <= zCoord + 1;
 	}
-	
+
 	static {
 		LH.add("gt.tooltip.multiblock.crucible.1", "3x3x3 Hollow of Walls with opening on Top.");
 		LH.add("gt.tooltip.multiblock.crucible.2", "Main at Bottom-Center.");
@@ -142,7 +144,7 @@ public class MultiTileEntityCrucible extends TileEntityBase10MultiBlockBase impl
 		LH.add("gt.tooltip.multiblock.crucible.4", "Molds usable at second Layer of Walls");
 		LH.add("gt.tooltip.multiblock.crucible.5", "KU at Bottom Layer will turn into Air for Steelmaking");
 	}
-	
+
 	@Override
 	public void addToolTips(List<String> aList, ItemStack aStack, boolean aF3_H) {
 		aList.add(Chat.CYAN     + LH.get(LH.STRUCTURE) + ":");
@@ -159,18 +161,18 @@ public class MultiTileEntityCrucible extends TileEntityBase10MultiBlockBase impl
 		aList.add(Chat.DRED     + LH.get(LH.HAZARD_CONTACT));
 		aList.add(Chat.DGRAY    + LH.get(LH.TOOL_TO_REMOVE_SHOVEL));
 	}
-	
+
 	private boolean mHasToAddTimer = T;
-	
+
 	@Override public void onUnregisterPost() {mHasToAddTimer = T;}
-	
+
 	@Override
 	public void onCoordinateChange() {
 		super.onCoordinateChange();
 		GT_API_Proxy.SERVER_TICK_POST.remove(this);
 		onUnregisterPost();
 	}
-	
+
 	@Override
 	public void onTick2(long aTimer, boolean aIsServerSide) {
 		if (aIsServerSide && mHasToAddTimer) {
@@ -178,33 +180,33 @@ public class MultiTileEntityCrucible extends TileEntityBase10MultiBlockBase impl
 			mHasToAddTimer = F;
 		}
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public void onServerTickPost(boolean aFirst) {
 		long tTemperature = WD.envTemp(worldObj, xCoord, yCoord, zCoord), tHash = mContent.hashCode();
-		
+
 		if (!checkStructure(F)) {
 			if (mInventoryChanged || SERVER_TIME % 1200 == 5) {
 				if (checkStructure(T)) return;
 			}
-			
+
 			if (SERVER_TIME % 10 == 0) {if (mTemperature > tTemperature) mTemperature--; if (mTemperature < tTemperature) mTemperature++;}
 			mTemperature = Math.max(mTemperature, Math.min(200, tTemperature));
 			return;
 		}
-		
+
 		if (SERVER_TIME % 600 == 10 && worldObj.isRaining() && getRainOffset(0, 1, 0)) {
 			BiomeGenBase tBiome = getBiome();
 			if (tBiome.rainfall > 0 && tBiome.temperature >= 0.2) {
 				addMaterialStacks(Arrays.asList(OM.stack(MT.Water, U100 * (long)Math.max(1, tBiome.rainfall*100) * (worldObj.isThundering()?2:1))), tTemperature);
 			}
 		}
-		
+
 		if (!slotHas(0)) slot(0, WD.suck(worldObj, xCoord-0.5, yCoord+PX_P[2], zCoord-0.5, 2, 3, 2));
-		
+
 		ItemStack tStack = slot(0);
-		
+
 		if (ST.valid(tStack)) {
 			OreDictItemData tData = OM.anydata_(tStack);
 			if (tData == null) {
@@ -232,14 +234,14 @@ public class MultiTileEntityCrucible extends TileEntityBase10MultiBlockBase impl
 				if (addMaterialStacks(tList, tTemperature)) decrStackSize(0, 1);
 			}
 		}
-		
+
 		Set<OreDictMaterial> tAlreadyCheckedAlloys = new HashSetNoNulls<>();
-		
+
 		OreDictMaterial tPreferredAlloy = null;
 		IOreDictConfigurationComponent tPreferredRecipe = null;
 		long tMaxConversions = 0;
 		boolean tNewContent = (tHash != mContent.hashCode());
-		
+
 		for (OreDictMaterialStack tMaterial : mContent) {
 			if (mTemperature >= tMaterial.mMaterial.mMeltingPoint) {
 				for (OreDictMaterial tAlloy : tMaterial.mMaterial.mAlloyComponentReferences) if (tAlreadyCheckedAlloys.add(tAlloy) && mTemperature >= tAlloy.mMeltingPoint) {
@@ -248,15 +250,15 @@ public class MultiTileEntityCrucible extends TileEntityBase10MultiBlockBase impl
 						for (OreDictMaterialStack tComponent : tAlloyRecipe.getUndividedComponents()) {
 							tNeededStuff.add(OM.stack(tComponent.mMaterial, Math.max(1, tComponent.mAmount / U)));
 						}
-						
+
 						if (!tNeededStuff.isEmpty()) {
 							int tNonMolten = 0;
-							
+
 							boolean tBreak = F;
 							long tConversions = Long.MAX_VALUE;
 							for (OreDictMaterialStack tComponent : tNeededStuff) {
 								if (mTemperature < tComponent.mMaterial.mMeltingPoint) tNonMolten++;
-								
+
 								tBreak = T;
 								for (OreDictMaterialStack tContent : mContent) {
 									if (tContent.mMaterial == tComponent.mMaterial) {
@@ -267,7 +269,7 @@ public class MultiTileEntityCrucible extends TileEntityBase10MultiBlockBase impl
 								}
 								if (tBreak) break;
 							}
-							
+
 							if (!tBreak && tNonMolten <= 1 && tConversions > 0) {
 								if (tPreferredAlloy == null || tPreferredRecipe == null || tConversions * tAlloyRecipe.getCommonDivider() > tMaxConversions * tPreferredRecipe.getCommonDivider()) {
 									tMaxConversions = tConversions;
@@ -280,7 +282,7 @@ public class MultiTileEntityCrucible extends TileEntityBase10MultiBlockBase impl
 				}
 			}
 		}
-		
+
 		if (tPreferredAlloy != null && tPreferredRecipe != null) {
 			for (OreDictMaterialStack tComponent : tPreferredRecipe.getUndividedComponents()) {
 				for (OreDictMaterialStack tContent : mContent) {
@@ -292,7 +294,7 @@ public class MultiTileEntityCrucible extends TileEntityBase10MultiBlockBase impl
 			}
 			OM.stack(tPreferredAlloy, tPreferredRecipe.getCommonDivider() * tMaxConversions).addToList(mContent);
 		}
-		
+
 		List<OreDictMaterialStack> tToBeAdded = new ArrayListNoNulls<>();
 		for (int i = 0; i < mContent.size(); i++) {
 			OreDictMaterialStack tMaterial = mContent.get(i);
@@ -332,38 +334,38 @@ public class MultiTileEntityCrucible extends TileEntityBase10MultiBlockBase impl
 				tMaterial.addToList(mContent);
 			}
 		}
-		
+
 		double tWeight = mMaterial.getWeight(U*100);
 		long tTotal = 0;
 		OreDictMaterialStack tLightest = null;
-		
+
 		for (OreDictMaterialStack tMaterial : mContent) {
 			if (tLightest == null || tMaterial.mMaterial.mGramPerCubicCentimeter < tLightest.mMaterial.mGramPerCubicCentimeter) tLightest = tMaterial;
 			tWeight += tMaterial.weight();
 			tTotal += tMaterial.mAmount;
 		}
-		
+
 		oTemperature = mTemperature;
-		
+
 		short tDisplayedFluid = mDisplayedFluid, tDisplayedHeight = mDisplayedHeight;
 		mDisplayedHeight = (byte)UT.Code.scale(tTotal, MAX_AMOUNT, 255, F);
 		mDisplayedFluid = (tLightest == null || tLightest.mMaterial.mMeltingPoint > mTemperature ? -1 : tLightest.mMaterial.mID);
 		if (mDisplayedFluid != tDisplayedFluid || mDisplayedHeight != tDisplayedHeight) updateClientData();
-		
+
 		long tRequiredEnergy = 1 + (long)(tWeight / KG_PER_ENERGY), tConversions = mEnergy / tRequiredEnergy;
-		
+
 		if (mCooldown > 0) mCooldown--;
-		
+
 		if (tConversions != 0) {
 			mEnergy -= tConversions * tRequiredEnergy;
 			mTemperature += tConversions;
 			mCooldown = 100;
 		}
-		
+
 		if (mCooldown <= 0) {mCooldown = 10; if (mTemperature > tTemperature) mTemperature--; if (mTemperature < tTemperature) mTemperature++;}
-		
+
 		mTemperature = Math.max(mTemperature, Math.min(200, tTemperature));
-		
+
 		if (mTemperature > getTemperatureMax(SIDE_INSIDE)) {
 			UT.Sounds.send(SFX.MC_FIZZ, this, F);
 			GarbageGT.trash(mContent);
@@ -376,13 +378,13 @@ public class MultiTileEntityCrucible extends TileEntityBase10MultiBlockBase impl
 			}
 			return;
 		}
-		
+
 		if (mMeltDown != (mTemperature+100 > getTemperatureMax(SIDE_ANY))) {
 			mMeltDown = !mMeltDown;
 			updateClientData();
 		}
 	}
-	
+
 	public boolean addMaterialStacks(List<OreDictMaterialStack> aList, long aTemperature) {
 		if (checkStructure(F) && OM.total(mContent)+OM.total(aList) <= MAX_AMOUNT) {
 			double tWeight1 = OM.weight(mContent)+mMaterial.getWeight(U*100), tWeight2 = OM.weight(aList);
@@ -406,32 +408,32 @@ public class MultiTileEntityCrucible extends TileEntityBase10MultiBlockBase impl
 		}
 		return F;
 	}
-	
+
 	@Override
 	public long getTemperatureValue(byte aSide) {
 		return mTemperature;
 	}
-	
+
 	@Override
 	public long getTemperatureMax(byte aSide) {
 		return (long)(mMaterial.mMeltingPoint * HEAT_RESISTANCE_BONUS);
 	}
-	
+
 	@Override
 	public boolean isMoldInputSide(byte aSide) {
 		return SIDES_TOP[aSide] && checkStructure(F);
 	}
-	
+
 	@Override
 	public long getMoldMaxTemperature() {
 		return getTemperatureMax(SIDE_INSIDE);
 	}
-	
+
 	@Override
 	public long getMoldRequiredMaterialUnits() {
 		return 1;
 	}
-	
+
 	@Override
 	public long fillMold(OreDictMaterialStack aMaterial, long aTemperature, byte aSide) {
 		if (isMoldInputSide(aSide)) {
@@ -440,9 +442,9 @@ public class MultiTileEntityCrucible extends TileEntityBase10MultiBlockBase impl
 		}
 		return 0;
 	}
-	
+
 	@Override public double getWeightValue(byte aSide) {return OM.weight(mContent);}
-	
+
 	@Override
 	public boolean breakBlock() {
 		GarbageGT.trash(mContent);
@@ -453,9 +455,9 @@ public class MultiTileEntityCrucible extends TileEntityBase10MultiBlockBase impl
 		}
 		return super.breakBlock();
 	}
-	
+
 	@Override public boolean attachCoversFirst(byte aSide) {return F;}
-	
+
 	@Override
 	public boolean onBlockActivated3(EntityPlayer aPlayer, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (!checkStructure(F)) return F;
@@ -464,7 +466,7 @@ public class MultiTileEntityCrucible extends TileEntityBase10MultiBlockBase impl
 				ItemStack aStack = aPlayer.getCurrentEquippedItem();
 				OreDictMaterialStack tLightest = null;
 				for (OreDictMaterialStack tMaterial : mContent) if (tLightest == null || tMaterial.mMaterial.mGramPerCubicCentimeter < tLightest.mMaterial.mGramPerCubicCentimeter) tLightest = tMaterial;
-				
+
 				if (slotHas(0)) {
 					if (aStack == null) {
 						aPlayer.inventory.setInventorySlotContents(aPlayer.inventory.currentItem, slotTake(0));
@@ -542,7 +544,7 @@ public class MultiTileEntityCrucible extends TileEntityBase10MultiBlockBase impl
 		}
 		return F;
 	}
-	
+
 	@Override
 	public boolean fillMoldAtSide(ITileEntityMold aMold, byte aSide, byte aSideOfMold) {
 		if (checkStructure(F)) for (OreDictMaterialStack tContent : mContent) if (tContent != null && mTemperature >= tContent.mMaterial.mMeltingPoint && tContent.mMaterial.mTargetSmelting.mMaterial == tContent.mMaterial) {
@@ -554,7 +556,7 @@ public class MultiTileEntityCrucible extends TileEntityBase10MultiBlockBase impl
 		}
 		return F;
 	}
-	
+
 	@Override
 	public long onToolClick2(String aTool, long aRemainingDurability, long aQuality, Entity aPlayer, List<String> aChatReturn, IInventory aPlayerInventory, boolean aSneaking, ItemStack aStack, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (isClientSide()) return super.onToolClick2(aTool, aRemainingDurability, aQuality, aPlayer, aChatReturn, aPlayerInventory, aSneaking, aStack, aSide, aHitX, aHitY, aHitZ);
@@ -584,18 +586,18 @@ public class MultiTileEntityCrucible extends TileEntityBase10MultiBlockBase impl
 		}
 		return super.onToolClick2(aTool, aRemainingDurability, aQuality, aPlayer, aChatReturn, aPlayerInventory, aSneaking, aStack, aSide, aHitX, aHitY, aHitZ);
 	}
-	
+
 	@Override
 	public boolean onPlaced(ItemStack aStack, EntityPlayer aPlayer, MultiTileEntityContainer aMTEContainer, World aWorld, int aX, int aY, int aZ, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		mTemperature = WD.envTemp(worldObj, xCoord, yCoord, zCoord);
 		return T;
 	}
-	
+
 	@Override
 	public IPacket getClientDataPacket(boolean aSendAll) {
 		return getClientDataPacketByteArray(T, (byte)UT.Code.getR(mRGBa), (byte)UT.Code.getG(mRGBa), (byte)UT.Code.getB(mRGBa), getVisualData(), getDirectionData(), mDisplayedHeight, UT.Code.toByteS(mDisplayedFluid, 0), UT.Code.toByteS(mDisplayedFluid, 1), (byte)(mMeltDown ? 1 : 0));
 	}
-	
+
 	@Override
 	public boolean receiveDataByteArray(byte[] aData, INetworkHandler aNetworkHandler) {
 		mDisplayedHeight = aData[5];
@@ -603,9 +605,9 @@ public class MultiTileEntityCrucible extends TileEntityBase10MultiBlockBase impl
 		if (aData.length >= 9) mMeltDown = (aData[8] != 0);
 		return super.receiveDataByteArray(aData, aNetworkHandler);
 	}
-	
+
 	public int mRenderedRGBA = UNCOLORED;
-	
+
 	@Override
 	public int getRenderPasses2(Block aBlock, boolean[] aShouldSideBeRendered) {
 		short[] tRGBaArray = UT.Code.getRGBaArray(mRGBa);
@@ -615,7 +617,7 @@ public class MultiTileEntityCrucible extends TileEntityBase10MultiBlockBase impl
 			tRGBaArray[2] = UT.Code.bind8(tRGBaArray[2]/2+50);
 		}
 		mRenderedRGBA = UT.Code.getRGBaInt(tRGBaArray);
-		
+
 		if (UT.Code.exists(mDisplayedFluid, OreDictMaterial.MATERIAL_ARRAY)) {
 			mTextureMolten = OreDictMaterial.MATERIAL_ARRAY[mDisplayedFluid].getTextureMolten();
 		} else {
@@ -623,7 +625,7 @@ public class MultiTileEntityCrucible extends TileEntityBase10MultiBlockBase impl
 		}
 		return 6;
 	}
-	
+
 	@Override
 	public boolean setBlockBounds2(Block aBlock, int aRenderPass, boolean[] aShouldSideBeRendered) {
 		if (mStructureOkay) switch(aRenderPass) {
@@ -636,9 +638,9 @@ public class MultiTileEntityCrucible extends TileEntityBase10MultiBlockBase impl
 		}
 		return T;
 	}
-	
+
 	private ITexture mTextureMolten;
-	
+
 	@Override
 	public ITexture getTexture2(Block aBlock, int aRenderPass, byte aSide, boolean[] aShouldSideBeRendered) {
 		switch(aRenderPass) {
@@ -649,11 +651,11 @@ public class MultiTileEntityCrucible extends TileEntityBase10MultiBlockBase impl
 		}
 		return BlockTextureMulti.get(BlockTextureDefault.get((aSide==mFacing?mTexturesFront:mTextures)[FACES_TBS[aSide]], mRenderedRGBA, T), BlockTextureDefault.get((aSide==mFacing?mTexturesFront:mTextures)[FACES_TBS[aSide]+3], T));
 	}
-	
+
 	@Override
 	public void onWalkOver2(EntityLivingBase aEntity) {
 		super.onWalkOver2(aEntity);
-		
+
 		if (UT.Entities.applyTemperatureDamage(aEntity, mTemperature) && mTemperature > 320) {
 			if (!aEntity.isEntityAlive()) {
 				if (aEntity instanceof EntityVillager || aEntity instanceof EntityWitch) {
@@ -682,22 +684,22 @@ public class MultiTileEntityCrucible extends TileEntityBase10MultiBlockBase impl
 			}
 		}
 	}
-	
+
 	@Override public long getGibblValue(byte aSide) {return UT.Code.divup(OM.total(mContent)*1000, U9);}
 	@Override public long getGibblMax  (byte aSide) {return UT.Code.divup(MAX_AMOUNT*1000, U9);}
-	
+
 	@Override public byte getDefaultSide() {return SIDE_UP;}
 	@Override public boolean[] getValidSides() {return SIDES_NONE;}
 	@Override public boolean allowCovers(byte aSide) {return F;}
-	
+
 	@Override public ItemStack[] getDefaultInventory(NBTTagCompound aNBT) {return new ItemStack[1];}
 	@Override public int[] getAccessibleSlotsFromSide2(byte aSide) {return UT.Code.getAscendingArray(1);}
 	@Override public boolean canInsertItem2(int aSlot, ItemStack aStack, byte aSide) {return !slotHas(0);}
 	@Override public boolean canExtractItem2(int aSlot, ItemStack aStack, byte aSide) {return F;}
 	@Override public int getInventoryStackLimit() {return 64;}
-	
+
 	public static final List<TagData> ENERGYTYPES = new ArrayListNoNulls<>(F, TD.Energy.KU, TD.Energy.HU, TD.Energy.CU, TD.Energy.VIS_IGNIS);
-	
+
 	@Override public boolean isEnergyType(TagData aEnergyType, byte aSide, boolean aEmitting) {return !aEmitting && ENERGYTYPES.contains(aEnergyType);}
 	@Override public boolean isEnergyCapacitorType(TagData aEnergyType, byte aSide) {return ENERGYTYPES.contains(aEnergyType);}
 	@Override public boolean isEnergyAcceptingFrom(TagData aEnergyType, byte aSide, boolean aTheoretical) {return ENERGYTYPES.contains(aEnergyType);}
@@ -707,8 +709,8 @@ public class MultiTileEntityCrucible extends TileEntityBase10MultiBlockBase impl
 	@Override public long getEnergySizeInputRecommended(TagData aEnergyType, byte aSide) {return 2048;}
 	@Override public long getEnergySizeInputMax(TagData aEnergyType, byte aSide) {return Long.MAX_VALUE;}
 	@Override public Collection<TagData> getEnergyTypes(byte aSide) {return ENERGYTYPES;}
-	
+
 	@Override public float getBlockHardness() {return mDisplayedHeight != 0 ? super.getBlockHardness() * 100 : super.getBlockHardness();}
-	
+
 	@Override public String getTileEntityName() {return "gt.multitileentity.multiblock.crucible";}
 }

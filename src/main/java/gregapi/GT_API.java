@@ -44,6 +44,7 @@ import gregapi.compat.industrialcraft.ICompatIC2;
 import gregapi.compat.industrialcraft.ICompatIC2EUItem;
 import gregapi.compat.opencomputers.ICompatOC;
 import gregapi.compat.thaumcraft.ICompatTC;
+import gregapi.compat.waila.ICompatWLA;
 import gregapi.compat.warpdrive.ICompatWD;
 import gregapi.config.Config;
 import gregapi.config.ConfigCategories;
@@ -103,45 +104,45 @@ import static gregapi.data.CS.*;
 
 /**
  * @author Gregorius Techneticies
- * 
+ *
  * This loads before compatible Mods, except Micdoodlecore. GT_API_Post loads after all compatible Mods.
  */
 @Mod(modid=ModIDs.GAPI, name="Greg-API", version="GT6-MC1710", dependencies="required-before:"+ModIDs.GAPI_POST+"; after:"+ModIDs.MD8+"; before:"+ModIDs.IC2+"; before:"+ModIDs.IC2C+"; before:"+ModIDs.NC+"; before:"+ModIDs.IHL+"; before:"+ModIDs.FUNK+"; before:"+ModIDs.BAUBLES+"; before:"+ModIDs.HEE+"; before:"+ModIDs.GaSu+"; before:"+ModIDs.GaNe+"; before:"+ModIDs.GaEn+"; before:"+ModIDs.WdSt+"; before:"+ModIDs.CrGu+"; before:"+ModIDs.COFH_API+"; before:"+ModIDs.COFH_API_ENERGY+"; before:"+ModIDs.COFH_CORE+"; before:"+ModIDs.CC+"; before:"+ModIDs.OC+"; before:"+ModIDs.HEX+"; before:"+ModIDs.DE+"; before:"+ModIDs.AV+"; before:"+ModIDs.FR+"; before:"+ModIDs.FRMB+"; before:"+ModIDs.BINNIE+"; before:"+ModIDs.BINNIE_BEE+"; before:"+ModIDs.BINNIE_TREE+"; before:"+ModIDs.BINNIE_GENETICS+"; before:"+ModIDs.BINNIE_BOTANY+"; before:"+ModIDs.IE+"; before:"+ModIDs.UB+"; before:"+ModIDs.COG+"; before:"+ModIDs.PFAA+"; before:"+ModIDs.MIN+"; before:"+ModIDs.RH+"; before:"+ModIDs.CANDY+"; before:"+ModIDs.ABYSSAL+"; before:"+ModIDs.SOULFOREST+"; before:"+ModIDs.ARS+"; before:"+ModIDs.TC+"; before:"+ModIDs.TCTE+"; before:"+ModIDs.TCFM+"; before:"+ModIDs.BOTA+"; before:"+ModIDs.ALF+"; before:"+ModIDs.WTCH+"; before:"+ModIDs.HOWL+"; before:"+ModIDs.MoCr+"; before:"+ModIDs.WiMo+"; before:"+ModIDs.Birb+"; before:"+ModIDs.ChocoCraft+"; before:"+ModIDs.GoG+"; before:"+ModIDs.DRPG+"; before:"+ModIDs.LycM+"; before:"+ModIDs.LycM_Arctic+"; before:"+ModIDs.LycM_Demon+"; before:"+ModIDs.LycM_Desert+"; before:"+ModIDs.LycM_Forest+"; before:"+ModIDs.LycM_Fresh+"; before:"+ModIDs.LycM_Inferno+"; before:"+ModIDs.LycM_Jungle+"; before:"+ModIDs.LycM_Mountain+"; before:"+ModIDs.LycM_Plains+"; before:"+ModIDs.LycM_Salt+"; before:"+ModIDs.LycM_Shadow+"; before:"+ModIDs.LycM_Swamp+"; before:"+ModIDs.RC+"; before:"+ModIDs.BP+"; before:"+ModIDs.PR+"; before:"+ModIDs.PR_EXPANSION+"; before:"+ModIDs.PR_INTEGRATION+"; before:"+ModIDs.PR_TRANSMISSION+"; before:"+ModIDs.PR_TRANSPORT+"; before:"+ModIDs.PR_EXPLORATION+"; before:"+ModIDs.PR_COMPATIBILITY+"; before:"+ModIDs.PR_FABRICATION+"; before:"+ModIDs.PR_ILLUMINATION+"; before:"+ModIDs.PE+"; before:"+ModIDs.AE+"; before:"+ModIDs.MO+"; before:"+ModIDs.TE_FOUNDATION+"; before:"+ModIDs.TE_DYNAMICS+"; before:"+ModIDs.TE_DRILLS+"; before:"+ModIDs.TE+"; before:"+ModIDs.ZTONES+"; before:"+ModIDs.CHSL+"; before:"+ModIDs.NePl+"; before:"+ModIDs.NeLi+"; before:"+ModIDs.EnLi+"; before:"+ModIDs.EtFu+"; before:"+ModIDs.BB+"; before:"+ModIDs.DYNAMIC_TREES+"; before:"+ModIDs.BbLC+"; before:"+ModIDs.CARP+"; before:"+ModIDs.BETTER_RECORDS+"; before:"+ModIDs.TF+"; before:"+ModIDs.ERE+"; before:"+ModIDs.MFR+"; before:"+ModIDs.FSP+"; before:"+ModIDs.SC2+"; before:"+ModIDs.PnC+"; before:"+ModIDs.ExU+"; before:"+ModIDs.ExS+"; before:"+ModIDs.EIO+"; before:"+ModIDs.RT+"; before:"+ModIDs.AA+"; before:"+ModIDs.TreeCap+"; before:"+ModIDs.HaC+"; before:"+ModIDs.CookBook+"; before:"+ModIDs.APC+"; before:"+ModIDs.ENVM+"; before:"+ModIDs.MaCr+"; before:"+ModIDs.BC_TRANSPORT+"; before:"+ModIDs.BC_SILICON+"; before:"+ModIDs.BC_FACTORY+"; before:"+ModIDs.BC_ENERGY+"; before:"+ModIDs.BC_ROBOTICS+"; before:"+ModIDs.BC+"; before:"+ModIDs.BC_BUILDERS+"; before:"+ModIDs.MgC+"; before:"+ModIDs.BR+"; before:"+ModIDs.HBM+"; before:"+ModIDs.ELN+"; before:"+ModIDs.DRGN+"; before:"+ModIDs.ElC+"; before:"+ModIDs.CrC+"; before:"+ModIDs.ReC+"; before:"+ModIDs.RoC+"; before:"+ModIDs.Mek+"; before:"+ModIDs.Mek_Tools+"; before:"+ModIDs.Mek_Generators+"; before:"+ModIDs.GC+"; before:"+ModIDs.GC_PLANETS+"; before:"+ModIDs.GC_GALAXYSPACE+"; before:"+ModIDs.VULPES+"; before:"+ModIDs.GC_ADV_ROCKETRY+"; before:"+ModIDs.GC_EXTRAPLANETS+"; before:"+ModIDs.BTL+"; before:"+ModIDs.AETHER+"; before:"+ModIDs.AETHEL+"; before:"+ModIDs.TROPIC+"; before:"+ModIDs.ATUM+"; before:"+ModIDs.EB+"; before:"+ModIDs.EBXL+"; before:"+ModIDs.BoP+"; before:"+ModIDs.HiL+"; before:"+ModIDs.ATG+"; before:"+ModIDs.RTG+"; before:"+ModIDs.RWG+"; before:"+ModIDs.CW2+"; before:"+ModIDs.A97_MINING+"; before:"+ModIDs.MYST+"; before:"+ModIDs.WARPBOOK+"; before:"+ModIDs.LOSTBOOKS+"; before:"+ModIDs.LOOTBAGS+"; before:"+ModIDs.EUREKA+"; before:"+ModIDs.ENCHIRIDION+"; before:"+ModIDs.ENCHIRIDION2+"; before:"+ModIDs.SmAc+"; before:"+ModIDs.HQM+"; before:"+ModIDs.SD+"; before:"+ModIDs.BTRS+"; before:"+ModIDs.JABBA+"; before:"+ModIDs.MaCu+"; before:"+ModIDs.PdC+"; before:"+ModIDs.Bamboo+"; before:"+ModIDs.PMP+"; before:"+ModIDs.Fossil+"; before:"+ModIDs.GrC+"; before:"+ModIDs.GrC_Apples+"; before:"+ModIDs.GrC_Bamboo+"; before:"+ModIDs.GrC_Bees+"; before:"+ModIDs.GrC_Cellar+"; before:"+ModIDs.GrC_Fish+"; before:"+ModIDs.GrC_Grapes+"; before:"+ModIDs.GrC_Hops+"; before:"+ModIDs.GrC_Milk+"; before:"+ModIDs.GrC_Rice+"; before:"+ModIDs.BG2+"; before:"+ModIDs.BWM+"; before:"+ModIDs.OMT+"; before:"+ModIDs.TG+"; before:"+ModIDs.FM+"; before:"+ModIDs.FZ+"; before:"+ModIDs.MNTL+"; before:"+ModIDs.OB+"; before:"+ModIDs.PA+"; before:"+ModIDs.TiC+"; before:"+ModIDs.MF2+"; before:"+ModIDs.TRANSLOCATOR+"; before:"+ModIDs.WR_CBE_C+"; before:"+ModIDs.WR_CBE_A+"; before:"+ModIDs.WR_CBE_L+"; before:"+ModIDs.VOLTZ+"; before:"+ModIDs.MFFS+"; before:"+ModIDs.ICBM+"; before:"+ModIDs.ATSCI+"; before:inventorytweaks; before:ironbackpacks; before:journeymap; before:LogisticsPipes; before:LunatriusCore; before:NEIAddons; before:NEIAddons|Developer; before:NEIAddons|AppEng; before:NEIAddons|Botany; before:NEIAddons|Forestry; before:NEIAddons|CraftingTables; before:NEIAddons|ExNihilo; before:neiintegration; before:openglasses; before:simplyjetpacks; before:Stackie; before:StevesCarts; before:TiCTooltips; before:worldedit; before:McMultipart; before:OpenPeripheralCore; before:OpenPeripheralIntegration; before:OpenPeripheral; ")
 public class GT_API extends Abstract_Mod {
 	@SidedProxy(modId = ModIDs.GAPI, clientSide = "gregapi.GT_API_Proxy_Client", serverSide = "gregapi.GT_API_Proxy_Server")
 	public static GT_API_Proxy api_proxy;
-	
+
 	public static final Collection<Map<ItemStackContainer, ?>> STACKMAPS = new ArrayListNoNulls<>();
-	
+
 	/** Used to register Icons. It is not necessary to make those into Lists */
 	public static Set<Runnable> sBlockIconload = new HashSetNoNulls<>(), sItemIconload = new HashSetNoNulls<>();
 	/** The Icon Registers from Blocks and Items. They will get set right before the corresponding Icon Load Phase as executed in the Runnable List above. */
 	@SideOnly(Side.CLIENT)
 	public static IIconRegister sBlockIcons, sItemIcons;
-	
+
 	private LoggerPlayerActivity mPlayerLogger;
-	
+
 	@SuppressWarnings("unchecked")
 	public GT_API() {
 		GAPI = this;
-		
+
 		if (!MD.ENCHIRIDION.mLoaded) MD.MaCu.mLoaded = F;
-		
+
 		// A bunch of Code that is there to statically initialize the Database in the right order and without crashes.
 		MT.init();
 		BI.BAROMETER.toString();
 		OP.ore.toString();
-		
+
 		// Make sure Icons are initialized.
 		Textures.BlockIcons.VOID.toString();
 		Textures.ItemIcons .VOID.toString();
 		ErrorRenderer.INSTANCE.toString();
-		
+
 		// Guess what, I got a random Crash from one of those not being classloaded...
 		UT.Entities.class.toString();
 		IMTE_CanConnectRedstone.class.toString();
-		
-		
+
+
 		try {
 			DW = new DummyWorld();
 		} catch(Throwable e) {
@@ -151,17 +152,17 @@ public class GT_API extends Abstract_Mod {
 			e.printStackTrace(ERR);
 			ERR.println("======================================================================================================");
 		}
-		
+
 		IconsGT.INDEX_BLOCK_GAS       = TextureSet.addToAll(MD.GT.mID, F, "gas");
 		IconsGT.INDEX_BLOCK_PLASMA    = TextureSet.addToAll(MD.GT.mID, F, "plasma");
 		IconsGT.INDEX_BLOCK_MOLTEN    = TextureSet.addToAll(MD.GT.mID, F, "molten");
 		IconsGT.INDEX_BLOCK_PIPE_SIDE = TextureSet.addToAll(MD.GT.mID, F, "pipeSide");
-		
+
 		OP.ore              .addTextureSet(MD.GT, F);
 		OP.oreGravel        .addTextureSet(MD.GT, F);
 		OP.oreDense         .addTextureSet(MD.GT, F);
 		OP.oreBedrock       .addTextureSet(MD.GT, F);
-		
+
 		OP.pipeTiny         .addTextureSet(MD.GT, F);
 		OP.pipeSmall        .addTextureSet(MD.GT, F);
 		OP.pipeMedium       .addTextureSet(MD.GT, F);
@@ -169,10 +170,10 @@ public class GT_API extends Abstract_Mod {
 		OP.pipeHuge         .addTextureSet(MD.GT, F);
 		OP.pipeQuadruple    .addTextureSet(MD.GT, F);
 		OP.pipeNonuple      .addTextureSet(MD.GT, F);
-		
+
 		OP.wire             .addTextureSet(MD.GT, F);
 		OP.foil             .addTextureSet(MD.GT, F);
-		
+
 		// It is VERY important that those are registered first. Otherwise GregTech would output its own Storage Blocks.
 		OreDictManager.INSTANCE.setTarget_(OP.blockDust , MT.Stone     , ST.make(Blocks.gravel           , 1, 0), T, F, T);
 		OreDictManager.INSTANCE.setTarget_(OP.blockDust , MT.SoulSand  , ST.make(Blocks.soul_sand        , 1, 0), T, F, T);
@@ -191,15 +192,15 @@ public class GT_API extends Abstract_Mod {
 		OreDictManager.INSTANCE.setTarget_(OP.blockGem  , MT.Lapis     , ST.make(Blocks.lapis_block      , 1, 0), T, F, T);
 		OreDictManager.INSTANCE.setTarget_(OP.blockGem  , MT.Coal      , ST.make(Blocks.coal_block       , 1, 0), T, F, T);
 		OreDictManager.INSTANCE.setTarget_(OP.blockDust , MT.Redstone  , ST.make(Blocks.redstone_block   , 1, 0), T, F, T);
-		
+
 		// Fixing missing Container Items.
 		Items.mushroom_stew.setContainerItem(Items.bowl);
 		Items.potionitem.setContainerItem(Items.glass_bottle);
 		Items.experience_bottle.setContainerItem(Items.glass_bottle);
-		
+
 		// Fixing Max Stacksizes that don't make sense.
 		ST.forceProperMaxStacksizes();
-		
+
 		// Fixing some Adventure Mode things.
 		Blocks.bed.setHarvestLevel("axe", 0);
 		Blocks.sponge.setHarvestLevel("axe", 0);
@@ -207,7 +208,7 @@ public class GT_API extends Abstract_Mod {
 		Blocks.tnt.setHarvestLevel("pickaxe", 0);
 		Blocks.monster_egg.setHarvestLevel("pickaxe", 0);
 		Blocks.obsidian.setHarvestLevel("pickaxe", 3);
-		
+
 		try {
 			// The Access Transformer should make this work
 			Material.tnt.setAdventureModeExempt();
@@ -215,35 +216,35 @@ public class GT_API extends Abstract_Mod {
 			UT.Reflection.callMethod(Material.tnt, new String[] {"func_85158_p", "setAdventureModeExempt"}, T, F, F);
 			e.printStackTrace(ERR);
 		}
-		
+
 		Set<Block>
 		tSet = (Set<Block>)UT.Reflection.getFieldContent(ItemAxe.class, "field_150917_c", T, T); assert tSet != null;
 		tSet.add(Blocks.bed);
 		tSet.add(Blocks.hay_block);
 		tSet.add(Blocks.sponge);
-		
+
 		tSet = (Set<Block>)UT.Reflection.getFieldContent(ItemPickaxe.class, "field_150915_c", T, T); assert tSet != null;
 		tSet.add(Blocks.monster_egg);
 		tSet.add(Blocks.tnt);
 	}
-	
+
 	@Mod.EventHandler
 	public void onPreLoad(FMLPreInitializationEvent aEvent) {
 		DirectoriesGT.CONFIG = aEvent.getModConfigurationDirectory();
-		
+
 		DirectoriesGT.CONFIG_GT = new File(DirectoriesGT.CONFIG, "GregTech");
 		if (!DirectoriesGT.CONFIG_GT.exists()) DirectoriesGT.CONFIG_GT = new File(DirectoriesGT.CONFIG, "gregtech");
-		
+
 		DirectoriesGT.CONFIG_RECIPES = new File(DirectoriesGT.CONFIG, "Recipes");
 		if (!DirectoriesGT.CONFIG_RECIPES.exists()) DirectoriesGT.CONFIG_RECIPES = new File(DirectoriesGT.CONFIG, "recipes");
-		
+
 		DirectoriesGT.MINECRAFT = DirectoriesGT.CONFIG.getParentFile();
-		
+
 		DirectoriesGT.LOGS = new File(DirectoriesGT.MINECRAFT, "logs");
-		
+
 		onModPreInit(aEvent);
 	}
-	
+
 	@Mod.EventHandler
 	public void onLoad(FMLInitializationEvent aEvent) {
 		for (OreDictMaterial tMaterial : OreDictMaterial.MATERIAL_ARRAY) if (tMaterial != null && !tMaterial.contains(TD.Properties.INVALID_MATERIAL)) {
@@ -258,34 +259,34 @@ public class GT_API extends Abstract_Mod {
 		}
 		onModInit(aEvent);
 	}
-	
+
 //  @SubscribeEvent
 //  @Mod.EventHandler
 //  public void loadComplete(FMLLoadCompleteEvent aEvent) {
 //      Why the fuck doesn't this work!?! Who can actually receive this Event? Both annotations won't work...
 //  }
-	
+
 	@Override public String getModID() {return MD.GAPI.mID;}
 	@Override public String getModName() {return MD.GAPI.mName;}
 	@Override public String getModNameForLog() {return "GT_API";}
 	@Override public Abstract_Proxy getProxy() {return api_proxy;}
-	
+
 	@Mod.EventHandler public void onPostLoad        (FMLPostInitializationEvent aEvent) {onModPostInit(aEvent);}
 	@Mod.EventHandler public void onServerStarting  (FMLServerStartingEvent     aEvent) {onModServerStarting(aEvent);}
 	@Mod.EventHandler public void onServerStarted   (FMLServerStartedEvent      aEvent) {onModServerStarted(aEvent);}
 	@Mod.EventHandler public void onServerStopping  (FMLServerStoppingEvent     aEvent) {onModServerStopping(aEvent);}
 	@Mod.EventHandler public void onServerStopped   (FMLServerStoppedEvent      aEvent) {onModServerStopped(aEvent);}
-	
+
 	@Override
 	@SuppressWarnings({ "resource", "deprecation" })
 	public void onModPreInit2(FMLPreInitializationEvent aEvent) {
 		FMLInterModComms.sendRuntimeMessage(MD.GT.mID, "carbonconfig", "remapGui", MD.GAPI.mID);
-		
+
 		File
 		tFile = new File(DirectoriesGT.CONFIG_GT, "IDs.cfg");
 		if (!tFile.exists()) tFile = new File(DirectoriesGT.CONFIG_GT, "ids.cfg");
 		Config.sConfigFileIDs = new Configuration(tFile); Config.sConfigFileIDs.save();
-		
+
 		ConfigsGT.GREGTECH      = new Config("GregTech.cfg").setUseDefaultInNames(F);
 		ConfigsGT.RECIPES       = new Config("Recipes.cfg");
 		ConfigsGT.WORLDGEN      = new Config("WorldGenerationNew.cfg");
@@ -294,15 +295,15 @@ public class GT_API extends Abstract_Mod {
 		ConfigsGT.OREPROCESSING = new Config("OreProcessing.cfg");
 		// Deprecated Config Files.
 		ConfigsGT.OVERPOWERED = ConfigsGT.MACHINES = ConfigsGT.SPECIAL = ConfigsGT.GREGTECH;
-		
-		
+
+
 		tFile = new File(DirectoriesGT.CONFIG_GT, "Stacksizes.cfg");
 		if (!tFile.exists()) tFile = new File(DirectoriesGT.CONFIG_GT, "stacksizes.cfg");
 		Configuration tStackConfig = new Configuration(tFile);
-		
+
 		tFile = new File(DirectoriesGT.LOGS, "gregtech.log");
 		if (!tFile.exists()) try {tFile.createNewFile();} catch(Throwable e) {/**/}
-		
+
 		List<String>
 		tList = ((LogBuffer)OUT).mBufferedLog;
 		try {
@@ -310,9 +311,9 @@ public class GT_API extends Abstract_Mod {
 		} catch (Throwable e) {
 			OUT = System.out;
 		}
-		
+
 		for (String tString : tList) OUT.println(tString);
-		
+
 		if (ConfigsGT.GREGTECH.get("general", "LoggingErrors", T)) {
 			tList = ((LogBuffer)ERR).mBufferedLog;
 			ERR = OUT;
@@ -322,7 +323,7 @@ public class GT_API extends Abstract_Mod {
 			OUT.println("* WARNING: ERROR LOGGING HAS BEEN DISABLED FOR THIS LOG FILE         *");
 			OUT.println("**********************************************************************");
 		}
-		
+
 		tFile = new File(DirectoriesGT.CONFIG_GT, "materiallist.log");
 		if (!tFile.exists()) {try {tFile.createNewFile();} catch (Throwable e) {/**/}}
 		try {
@@ -331,7 +332,7 @@ public class GT_API extends Abstract_Mod {
 			MAT_LOG.println("* This is the complete List of usable GregTech Materials             *");
 			MAT_LOG.println("**********************************************************************");
 		} catch (Throwable e) {/**/}
-		
+
 		tFile = new File(DirectoriesGT.LOGS, "oredict.log");
 		if (!tFile.exists()) {try {tFile.createNewFile();} catch (Throwable e) {/**/}}
 		try {
@@ -342,15 +343,15 @@ public class GT_API extends Abstract_Mod {
 			ORD.println("**********************************************************************");
 			for (String tString : tList) ORD.println(tString);
 		} catch (Throwable e) {/**/}
-		
+
 		if (ConfigsGT.GREGTECH.get("general", "LoggingPlayerActivity", !CODE_CLIENT)) {
 			tFile = new File(DirectoriesGT.LOGS, "playeractivity_"+(System.currentTimeMillis()/60000)+".log");
 			if (!tFile.exists()) {try {tFile.createNewFile();} catch (Throwable e) {/**/}}
 			try {mPlayerLogger = new LoggerPlayerActivity(new PrintStream(tFile));} catch (Throwable e) {/**/}
 		}
-		
+
 		ConfigsGT.CLIENT = new Config(DirectoriesGT.MINECRAFT, "GregTech.cfg");
-		
+
 		D1                        = ConfigsGT.CLIENT.get(ConfigCategories.debug  , "logs"               , F);
 		D2                        = ConfigsGT.CLIENT.get(ConfigCategories.debug  , "oredict"            , F);
 		D3                        = ConfigsGT.CLIENT.get(ConfigCategories.debug  , "misc"               , F);
@@ -359,7 +360,7 @@ public class GT_API extends Abstract_Mod {
 		if ( ConfigsGT.CLIENT.get(ConfigCategories.debug, "april_fools"  , F)) APRIL_FOOLS = T;
 		if ( ConfigsGT.CLIENT.get(ConfigCategories.debug, "xmas_july"    , F)) XMAS_IN_JULY = T;
 		if ( ConfigsGT.CLIENT.get(ConfigCategories.debug, "xmas_december", F)) XMAS_IN_DECEMBER = T;
-		
+
 		if (APRIL_FOOLS) {
 			MT.W.setLocal("Wolframium");
 			MT.V.setLocal("Vandalium");
@@ -473,22 +474,22 @@ public class GT_API extends Abstract_Mod {
 			MT.OREMATS.Huebnerite.setLocal("Boobnerite");
 			MT.OREMATS.Bromargyrite.setLocal("Bromagnerite");
 			MT.OREMATS.Chalcopyrite.setLocal("Chackapackerite");
-			
+
 			for (OreDictMaterial tMaterial : OreDictMaterial.MATERIAL_MAP.values()) if (tMaterial.mNameLocal.toLowerCase().contains("wood")) tMaterial.setLocal(tMaterial.mNameLocal + " >:] nice");
 		}
-		
+
 		if (D1) {
 			tList = ((LogBuffer)DEB).mBufferedLog;
 			DEB = OUT;
 			for (String tString : tList) DEB.println(tString);
 		}
-		
-		
+
+
 		for (OreDictPrefix tPrefix : OreDictPrefix.VALUES) if (!tPrefix.contains(TD.Prefix.PREFIX_UNUSED)) {
 			tPrefix.setConfigStacksize(tStackConfig.get("stacksizes", tPrefix.mNameInternal+"_"+tPrefix.mDefaultStackSize, tPrefix.mDefaultStackSize).getInt());
 		}
 		tStackConfig.save();
-		
+
 		SURVIVAL_INTO_ADVENTURE_MODE            = ConfigsGT.GREGTECH.get("general", "forceAdventureMode"               , F);
 		ADVENTURE_MODE_KIT                      = ConfigsGT.GREGTECH.get("general", "AdventureModeStartingKit"         , !MD.GT.mLoaded);
 		HUNGER_BY_INVENTORY_WEIGHT              = ConfigsGT.GREGTECH.get("general", "AFK_Hunger"                       ,  MD.GT.mLoaded);
@@ -526,15 +527,15 @@ public class GT_API extends Abstract_Mod {
 		ZOMBIES_HOLD_PICKAXES                   = ConfigsGT.GREGTECH.get("general", "Zombies_Hold_Pickaxes"            , F);
 		ZOMBIES_HOLD_TNT                        = ConfigsGT.GREGTECH.get("general", "Zombies_Hold_TNT"                 , F);
 		ZOMBIES_IGNITE_HELD_TNT                 = ConfigsGT.GREGTECH.get("general", "Zombies_Ignite_Held_TNT"          , F);
-		
+
 		ENABLE_ADDING_IC2_MACERATOR_RECIPES     = ConfigsGT.GREGTECH.get("ic2", "EnableAddingMaceratorRecipes"         , T);
 		ENABLE_ADDING_IC2_EXTRACTOR_RECIPES     = ConfigsGT.GREGTECH.get("ic2", "EnableAddingExtractorRecipes"         , T);
 		ENABLE_ADDING_IC2_COMPRESSOR_RECIPES    = ConfigsGT.GREGTECH.get("ic2", "EnableAddingCompressorRecipes"        , T);
 		ENABLE_ADDING_IC2_OREWASHER_RECIPES     = ConfigsGT.GREGTECH.get("ic2", "EnableAddingOreWasherRecipes"         , T);
 		ENABLE_ADDING_IC2_CENTRIFUGE_RECIPES    = ConfigsGT.GREGTECH.get("ic2", "EnableAddingThermalCentrifugeRecipes" , T);
-		
+
 		if (!ConfigsGT.GREGTECH.get("general", "UseTFCAttackMultiplierWhenLoaded" , T) || TFC_DAMAGE_MULTIPLIER < 1 || (!MD.TFC.mLoaded && !MD.TFCP.mLoaded)) TFC_DAMAGE_MULTIPLIER = 1;
-		
+
 		if (MD.IC2C.mLoaded) {
 		DISABLE_ALL_IC2_MACERATOR_RECIPES       = F;
 		ENABLE_ADDING_IC2_MACERATOR_RECIPES     = T;
@@ -569,12 +570,12 @@ public class GT_API extends Abstract_Mod {
 		DISABLE_ALL_IC2_CENTRIFUGE_RECIPES      = F;
 		ENABLE_ADDING_IC2_CENTRIFUGE_RECIPES    = F;
 		}
-		
+
 		if (ConfigsGT.GREGTECH.get("general", "disable_STDOUT"             , F)) System.out.close();
 		if (ConfigsGT.GREGTECH.get("general", "disable_STDERR"             , F)) System.err.close();
 		if (ConfigsGT.GREGTECH.get("general", "hardermobspawners"          , T)) Blocks.mob_spawner.setHardness(500.0F);
 		if (ConfigsGT.GREGTECH.get("general", "blastresistantmobspawners"  , T)) Blocks.mob_spawner.setResistance(6000000.0F); else Blocks.mob_spawner.setResistance(60);
-		
+
 		FIRE_EXPLOSIONS                     = ConfigsGT.GREGTECH.get("machines", "explode_by_fire"    , T);
 		RAIN_EXPLOSIONS                     = ConfigsGT.GREGTECH.get("machines", "explode_by_rain"    , T);
 		WATER_EXPLOSIONS                    = ConfigsGT.GREGTECH.get("machines", "explode_by_water"   , T);
@@ -585,21 +586,21 @@ public class GT_API extends Abstract_Mod {
 		WATER_BREAKING                      = ConfigsGT.GREGTECH.get("machines", "break_by_water"     , T);
 		THUNDER_BREAKING                    = ConfigsGT.GREGTECH.get("machines", "break_by_thunder"   , T);
 		OVERCHARGE_BREAKING                 = ConfigsGT.GREGTECH.get("machines", "break_by_overload"  , F);
-		
+
 		if (FIRE_EXPLOSIONS      ) FIRE_BREAKING       = T;
 		if (RAIN_EXPLOSIONS      ) RAIN_BREAKING       = T;
 		if (WATER_EXPLOSIONS     ) WATER_BREAKING      = T;
 		if (THUNDER_EXPLOSIONS   ) THUNDER_BREAKING    = T;
 		if (OVERCHARGE_EXPLOSIONS) OVERCHARGE_BREAKING = T;
-		
+
 		if (CONFIG_HARDNESS_MULTIPLIER_SAND <= 0.0) CONFIG_HARDNESS_MULTIPLIER_SAND = 1.0;
 		if (CONFIG_HARDNESS_MULTIPLIER_ROCK <= 0.0) CONFIG_HARDNESS_MULTIPLIER_ROCK = 1.0;
 		if (CONFIG_HARDNESS_MULTIPLIER_ORES <= 0.0) CONFIG_HARDNESS_MULTIPLIER_ORES = 1.0;
-		
+
 		HARDNESS_MULTIPLIER_SAND = CONFIG_HARDNESS_MULTIPLIER_SAND;
 		HARDNESS_MULTIPLIER_ROCK = CONFIG_HARDNESS_MULTIPLIER_ROCK;
 		HARDNESS_MULTIPLIER_ORES = CONFIG_HARDNESS_MULTIPLIER_ORES;
-		
+
 		if (ConfigsGT.GREGTECH.get("compat", "IC2Classic"          , T)) ICompat.COMPAT_CLASSES.add(                   (ICompat          )UT.Reflection.callConstructor("gregapi.compat.industrialcraft.CompatIC2C"      , 0, null, D2));
 		if (ConfigsGT.GREGTECH.get("compat", "IC2EnergyItems"      , T)) ICompat.COMPAT_CLASSES.add(COMPAT_EU_ITEM   = (ICompatIC2EUItem )UT.Reflection.callConstructor("gregapi.compat.industrialcraft.CompatIC2EUItem" , 0, null, D2));
 		if (ConfigsGT.GREGTECH.get("compat", "IndustrialCraft2"    , T)) ICompat.COMPAT_CLASSES.add(COMPAT_IC2       = (ICompatIC2       )UT.Reflection.callConstructor("gregapi.compat.industrialcraft.CompatIC2"       , 0, null, D2));
@@ -610,9 +611,10 @@ public class GT_API extends Abstract_Mod {
 		if (ConfigsGT.GREGTECH.get("compat", "Forestry"            , T)) ICompat.COMPAT_CLASSES.add(COMPAT_FR        = (ICompatFR        )UT.Reflection.callConstructor("gregapi.compat.forestry.CompatFR"               , 0, null, D2));
 		if (ConfigsGT.GREGTECH.get("compat", "GalactiCraft"        , T)) ICompat.COMPAT_CLASSES.add(COMPAT_GC        = (ICompatGC        )UT.Reflection.callConstructor("gregapi.compat.galacticraft.CompatGC"           , 0, null, D2));
 		if (ConfigsGT.GREGTECH.get("compat", "WarpDrive"           , T)) ICompat.COMPAT_CLASSES.add(COMPAT_WD        = (ICompatWD        )UT.Reflection.callConstructor("gregapi.compat.warpdrive.CompatWD"              , 0, null, D2));
-		
+		if (ConfigsGT.GREGTECH.get("compat", "Waila",                T)) ICompat.COMPAT_CLASSES.add(COMPAT_WLA       = (ICompatWLA       )UT.Reflection.callConstructor("gregapi.compat.waila.CompatWLA"                 , 0, null, D2));
+
 		if (MD.TC.mLoaded) try {ThaumcraftApi.objectTags.isEmpty();} catch(NoSuchFieldError e) {throw new RuntimeException("Please uninstall ThaumicFixer, GregTech-6 itself by now fixes the Thaumometer Lag Issue in a far better and less 'Thaumcraft-Addons breaking' way than Thaumic Fixer.");}
-		
+
 		SHOW_HIDDEN_ITEMS                   = ConfigsGT.CLIENT.get(ConfigCategories.visibility, "HiddenGTItems"           , F);
 		SHOW_HIDDEN_MATERIALS               = ConfigsGT.CLIENT.get(ConfigCategories.visibility, "HiddenGTMaterials"       , F);
 		SHOW_HIDDEN_PREFIXES                = ConfigsGT.CLIENT.get(ConfigCategories.visibility, "HiddenGTPrefixes"        , F);
@@ -621,21 +623,21 @@ public class GT_API extends Abstract_Mod {
 		SHOW_ORE_BLOCK_PREFIXES             = ConfigsGT.CLIENT.get(ConfigCategories.visibility, "OreBlocks"               , F);
 		SHOW_INTERNAL_NAMES                 = ConfigsGT.CLIENT.get(ConfigCategories.visibility, "InternalNames"           , F);
 		SHOW_CHEM_FORMULAS                  = ConfigsGT.CLIENT.get(ConfigCategories.visibility, "ChemTooltips"            , T);
-		
+
 		TOOL_SOUNDS_SETTING = TOOL_SOUNDS   = ConfigsGT.CLIENT.get(ConfigCategories.general, "sound_tools"             , TOOL_SOUNDS_SETTING);
 		ITexture.Util.GT_ALPHA_BLENDING     = ConfigsGT.CLIENT.get(ConfigCategories.general, "useGTAlphaBlending"      , ITexture.Util.GT_ALPHA_BLENDING);
 		ITexture.Util.MC_ALPHA_BLENDING     = ConfigsGT.CLIENT.get(ConfigCategories.general, "useMCAlphaBlending"      , ITexture.Util.MC_ALPHA_BLENDING);
-		
+
 		GT6WorldGenerator.PFAA = (ConfigsGT.WORLDGEN.get(ConfigCategories.general, "AutoDetectPFAA", T) && MD.PFAA.mLoaded && MD.COG.mLoaded);
 		GT6WorldGenerator.TFC  = (ConfigsGT.WORLDGEN.get(ConfigCategories.general, "AutoDetectTFC" , T) && (MD.TFC.mLoaded || MD.TFCP.mLoaded));
-		
+
 		// Register Crafting Recipe Classes.
 		RecipeSorter.register("gregtech:shaped"   , AdvancedCraftingShaped.class   , RecipeSorter.Category.SHAPED   , "after:minecraft:shaped before:minecraft:shapeless");
 		RecipeSorter.register("gregtech:shapeless", AdvancedCraftingShapeless.class, RecipeSorter.Category.SHAPELESS, "after:gregtech:shaped after:minecraft:shapeless");
 		RecipeSorter.register("gregtech:1ToY"     , AdvancedCrafting1ToY.class     , RecipeSorter.Category.SHAPELESS, "after:gregtech:shaped after:gregtech:shapeless");
 		RecipeSorter.register("gregtech:XToY"     , AdvancedCraftingXToY.class     , RecipeSorter.Category.SHAPELESS, "after:gregtech:shaped after:gregtech:1ToY");
 		RecipeSorter.register("gregtech:tool"     , AdvancedCraftingTool.class     , RecipeSorter.Category.SHAPELESS, "after:gregtech:shaped after:gregtech:XToY");
-		
+
 		// A Default Packet Handler for some of the already existing Code. Yes, all those Packets are generalised special cases in order to save on Bandwidth.
 		// [        +127] = PacketConfig
 		// [        +126] = PacketPrefix
@@ -739,7 +741,7 @@ public class GT_API extends Abstract_Mod {
 		// Preventing a Water Dupe by registering this Recipe early so it won't be overridden
 		RM.Canner.addRecipe1(T, 16, 16, ST.make(Items.glass_bottle, 1, 0), FL.Water.make(250), NF, ST.make(Items.potionitem, 1, 0));
 		RM.Canner.addRecipe1(T, 16, 16, ST.make(Items.potionitem, 1, 0), ST.make(Items.glass_bottle, 1, 0));
-		
+
 		try {
 			LoadController tLoadController = ((LoadController)UT.Reflection.getFieldContent(Loader.instance(), "modController", T, T));
 			List<ModContainer> tModList = tLoadController.getActiveModList(), tNewModsList = new ArrayList<>(tModList.size());
@@ -753,23 +755,23 @@ public class GT_API extends Abstract_Mod {
 		} catch(Throwable e) {
 			e.printStackTrace(ERR);
 		}
-		
+
 		for (ICompat tCompat : ICompat.COMPAT_CLASSES) try {tCompat.onPreLoad(aEvent);} catch(Throwable e) {e.printStackTrace(ERR);}
 	}
-	
+
 	@Override
 	public void onModInit2(FMLInitializationEvent aEvent) {
 		if (MD.CHSL.mLoaded) try {
 			Carving.chisel.getGroup("cobblestone").setOreName(null);
 			Carving.chisel.getGroup("glowstone").setOreName(null);
 		} catch(Throwable e) {e.printStackTrace(ERR);}
-		
+
 		OUT.println(getModNameForLog() + ": If the Loading Bar somehow Freezes at this Point, then you definetly ran out of Memory or permgenspace, look at the other Logs to confirm it.");
 		OreDictManager.INSTANCE.enableRegistrations();
-		
+
 		for (ICompat tCompat : ICompat.COMPAT_CLASSES) try {tCompat.onLoad(aEvent);} catch(Throwable e) {e.printStackTrace(ERR);}
 	}
-	
+
 	@Override
 	public void onModPostInit2(FMLPostInitializationEvent aEvent) {
 		if (MD.IC2.mLoaded) {
@@ -788,23 +790,23 @@ public class GT_API extends Abstract_Mod {
 			PotionsGT.ID_CONDUCTIVE   = blusunrize.immersiveengineering.common.util.IEPotions.conductive.id;
 			PotionsGT.ID_STICKY       = blusunrize.immersiveengineering.common.util.IEPotions.sticky.id;
 		}
-		
+
 		EnergyCompat.checkAvailabilities();
 		ToolCompat.checkAvailabilities();
 		ST.checkAvailabilities();
-		
+
 		OUT.println(getModNameForLog() + ": If the Loading Bar somehow Freezes at this Point, then you definetly ran out of Memory or permgenspace, look at the other Logs to confirm it.");
 		OreDictManager.INSTANCE.onPostLoad();
-		
+
 		ICover tCover = new CoverRedstoneTorch();
 		CoverRegistry.put(ST.make(Blocks.redstone_torch, 1, 0), tCover);
 		CoverRegistry.put(ST.make(Blocks.unlit_redstone_torch, 1, 0), tCover);
 		CoverRegistry.put(ST.make(Items.repeater, 1, 0), new CoverRedstoneRepeater());
-		
+
 		OreDictPrefix.applyAllStackSizes();
-		
+
 		ST.forceProperMaxStacksizes();
-		
+
 //      Doesn't fucking work, the Chisel API is pure garbage...
 //      if (MD.CHSL.mLoaded) {
 //          if (MD.EtFu.mLoaded) {
@@ -823,14 +825,14 @@ public class GT_API extends Abstract_Mod {
 //              FMLInterModComms.sendRuntimeMessage(GAPI, "ChiselAPI|Carving", "variation:add", "andesite|"+MD.GT.mID+":gt.stone.andesite|0");
 //          }
 //      }
-		
+
 		// Saving the Lang File.
 		LanguageHandler.save();
-		
+
 		if (mPlayerLogger != null) new Thread(mPlayerLogger).start();
-		
+
 		for (ICompat tCompat : ICompat.COMPAT_CLASSES) try {tCompat.onPostLoad(aEvent);} catch(Throwable e) {e.printStackTrace(ERR);}
-		
+
 		for (OreDictMaterial tMaterial : OreDictMaterial.MATERIAL_ARRAY) if (tMaterial != null && !tMaterial.contains(TD.Properties.INVALID_MATERIAL)) {
 			if (tMaterial.mID < 10000) MAT_LOG.print(" ");
 			if (tMaterial.mID <  1000) MAT_LOG.print(" ");
@@ -842,28 +844,28 @@ public class GT_API extends Abstract_Mod {
 			MAT_LOG.println();
 		}
 	}
-	
+
 	@Override
 	public void onModServerStarting2(FMLServerStartingEvent aEvent) {
 		for (ICompat tCompat : ICompat.COMPAT_CLASSES) try {tCompat.onServerStarting(aEvent);} catch(Throwable e) {e.printStackTrace(ERR);}
 	}
-	
+
 	@Override
 	public void onModServerStarted2(FMLServerStartedEvent aEvent) {
 		for (Map<ItemStackContainer, ?> tMap : STACKMAPS) UT.Code.reMap(tMap);
 		for (ICompat tCompat : ICompat.COMPAT_CLASSES) try {tCompat.onServerStarted(aEvent);} catch(Throwable e) {e.printStackTrace(ERR);}
 	}
-	
+
 	@Override
 	public void onModServerStopping2(FMLServerStoppingEvent aEvent) {
 		for (ICompat tCompat : ICompat.COMPAT_CLASSES) try {tCompat.onServerStopping(aEvent);} catch(Throwable e) {e.printStackTrace(ERR);}
 	}
-	
+
 	@Override
 	public void onModServerStopped2(FMLServerStoppedEvent aEvent) {
 		for (ICompat tCompat : ICompat.COMPAT_CLASSES) try {tCompat.onServerStopped(aEvent);} catch(Throwable e) {e.printStackTrace(ERR);}
 	}
-	
+
 	@Mod.EventHandler
 	public void onIDChangingEvent(FMLModIdMappingEvent aEvent) {
 		// Fixing missing Blocks caused by DragonAPI. The Issue is more complicated but it should fix some part of it.
@@ -892,9 +894,9 @@ public class GT_API extends Abstract_Mod {
 		if (Block.blockRegistry.getObjectById(144) == null) Block.blockRegistry.addObject(144, "skull", Blocks.skull);
 		if (Block.blockRegistry.getObjectById(149) == null) Block.blockRegistry.addObject(149, "unpowered_comparator", Blocks.unpowered_comparator);
 		if (Block.blockRegistry.getObjectById(150) == null) Block.blockRegistry.addObject(150, "powered_comparator", Blocks.powered_comparator);
-		
+
 		OUT.println(getModNameForLog() + ": Remapping ItemStackMaps due to ID Map change. Those damn Items should have a consistent Hashcode, but noooo, ofcourse they break Basic Code Conventions! Thanks Forge and Mojang!");
-		
+
 		for (Map<ItemStackContainer, ?> tMap : STACKMAPS) UT.Code.reMap(tMap);
 		for (ICompat tCompat : ICompat.COMPAT_CLASSES) try {tCompat.onIDChanging(aEvent);} catch(Throwable e) {e.printStackTrace(ERR);}
 	}

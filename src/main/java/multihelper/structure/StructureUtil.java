@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 
 import multihelper.structure.elements.StructureElementAir;
+import multihelper.structure.elements.StructureElementAnyOf;
 import net.minecraft.block.Block;
 
 import gregapi.block.multitileentity.MultiTileEntityRegistry;
@@ -84,5 +85,9 @@ public class StructureUtil {
 
     public static <T extends ITileEntityMultiBlockController> IStructureElement<T> air() {
         return new StructureElementAir<>();
+    }
+
+    public static <T extends ITileEntityMultiBlockController> IStructureElement<T> any_of(IStructureElement<T>... allowed) {
+        return new StructureElementAnyOf<>(allowed);
     }
 }

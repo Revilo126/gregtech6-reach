@@ -15,7 +15,6 @@ public class StructureElementMultiParts<T extends ITileEntityMultiBlockControlle
     private final IStructureElement<T>[] parts;
 
     public StructureElementMultiParts(String[] keys, IStructureElement<T>[] parts) {
-
         this.keys = keys;
         this.parts = parts;
     }

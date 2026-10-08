@@ -38,7 +38,7 @@ import static gregapi.data.CS.*;
 
 /**
  * @author Gregorius Techneticies
- * 
+ *
  * Contains common translatable Strings.
  */
 public class LH {
@@ -261,16 +261,23 @@ public class LH {
 	, TIME_WEEKS = "gt.lang.time.weeks"
 	, ADMIN_ONLY_CREATION = "gt.lang.admin.only.creation"
 	, WIP = "gt.lang.work.in.progress"
+    , FORMED = "gt.lang.tile.formed"
+    , NOT_FORMED = "gt.lang.tile.notformed"
+    , STATUS = "gt.lang.tile.status"
+    , RUNNING = "gt.lang.tile.running"
+    , ACTIVE = "gt.lang.tile.active"
+    , NOT_ACTIVE = "gt.lang.tile.notactive"
+    , PROGRESS = "gt.lang.tile.progress"
 	;
-	
+
 	public static final String add(String aKey, String aEnglish) {LanguageHandler.add(aKey, aEnglish); return aKey;}
 	public static final String get(String aKey) {return LanguageHandler.translate(aKey);}
 	public static final String get(String aKey, String aDefault) {return LanguageHandler.translate(aKey, aDefault);}
-	
+
 	public static final String percent(long aNumber) {return (aNumber/100) + ((aNumber%100)>9?"."+aNumber%100:".0"+(aNumber%100));}
-	
+
 	public static final String getToolTipBlastResistance(Block aBlock, double aResistance) {return Chat.WHITE + get(LH.TOOLTIP_BLASTRESISTANCE) + Chat.ORANGE + ((int)aResistance) + "." + (((int)(aResistance * 10)) % 10) + (aResistance < 4 ? Chat.BLINKING_RED + " " + get(LH.TOOLTIP_BLAST_RESISTANCE_TERRIBLE) : aResistance < 12 ? Chat.RED + " " + get(LH.TOOLTIP_BLAST_RESISTANCE_GHAST) : aResistance < 16 ? Chat.YELLOW + " " + get(LH.TOOLTIP_BLAST_RESISTANCE_CREEPER) : aResistance <= 40 ? Chat.GREEN + " " + get(LH.TOOLTIP_BLAST_RESISTANCE_TNT) : aResistance < 3330 || COMPAT_IC2 == null || COMPAT_IC2.isExplosionWhitelisted(aBlock) ? Chat.GREEN + " " + get(LH.TOOLTIP_BLAST_RESISTANCE_DYNAMITE) : Chat.BLINKING_CYAN + " " + get(LH.TOOLTIP_BLAST_RESISTANCE_NOT_NUKE));}
-	
+
 	public static final String getToolTipHarvest(Material aMaterial, String aHarvestTool, int aHarvestLevel) {
 		if (aMaterial.isAdventureModeExempt()) {
 			if (UT.Code.stringValid(aHarvestTool))
@@ -307,9 +314,9 @@ public class LH {
 		return LH.Chat.DGRAY + LH.get(LH.TOOL_TO_HARVEST) + ": " + LH.Chat.WHITE + LH.get(TOOL_LOCALISER_PREFIX + "sword") + "?";
 		return LH.Chat.DGRAY + LH.get(LH.TOOL_TO_HARVEST) + ": " + LH.Chat.WHITE + "Unknown";
 	}
-	
+
 	public static final String getToolTipEfficiency(long aEfficiency) {aEfficiency = Math.abs(aEfficiency); return Chat.YELLOW + get(EFFICIENCY) + ": " + Chat.WHITE + percent(aEfficiency) + "%";}
-	
+
 	public static final void addToolTipsEfficiency(List<String> aList, ItemStack aStack, boolean aF3_H, TE_Behavior_Energy_Converter aConverter) {
 		addToolTipsEfficiency(aList, aStack, aF3_H, aConverter.mEnergyIN, aConverter.mEnergyOUT, aConverter.mMultiplier);
 	}
@@ -327,7 +334,7 @@ public class LH {
 			}
 		}
 	}
-	
+
 	public static final void addToolTipsEfficiency(List<String> aList, ItemStack aStack, boolean aF3_H, TE_Behavior_Energy_Stats aEnergyIN, TE_Behavior_Energy_Stats aEnergyOUT, TE_Behavior_Energy_Stats aEnergyOUT2, long aMultiplier) {
 		if (TD.Energy.ALL_EU.contains(aEnergyIN.mType)) {
 			if (TD.Energy.ALL_EU.contains(aEnergyOUT.mType)) {
@@ -345,7 +352,7 @@ public class LH {
 			if (TD.Energy.ALL_EU.contains(aEnergyOUT2.mType) && aEnergyIN.mType == TD.Energy.RF) aList.add(LH.getToolTipEfficiency(UT.Code.units(10000, aEnergyIN.mRec, aEnergyOUT.mRec*8, F)));
 		}
 	}
-	
+
 	public static final void addEnergyToolTips(ITileEntityEnergy aTileEntity, List<String> aToolTips, TagData aEnergyTypeIN, TagData aEnergyTypeOUT, String aSidesIN, String aSidesOUT) {
 		if (aEnergyTypeIN != null) {
 			long tMin = aTileEntity.getEnergySizeInputMin(aEnergyTypeOUT, SIDE_ANY), tRec = aTileEntity.getEnergySizeInputRecommended(aEnergyTypeOUT, SIDE_ANY), tMax = aTileEntity.getEnergySizeInputMax(aEnergyTypeOUT, SIDE_ANY);
@@ -358,21 +365,21 @@ public class LH {
 			aToolTips.add(getToolTipRedstoneFluxEmit(aEnergyTypeOUT));
 		}
 	}
-	
+
 	public static final String getToolTipRedstoneFluxEmit(TagData aEnergyType) {
 		if (aEnergyType == TD.Energy.KU) return Chat.ORANGE + LH.get(LH.EMITS_REDSTONE_FLUX_LOSS)+" 50%";
 		if (aEnergyType == TD.Energy.RF) return Chat.ORANGE + LH.get(LH.EMITS_REDSTONE_FLUX);
 		if (aEnergyType == TD.Energy.MJ) return Chat.ORANGE + LH.get(LH.EMITS_REDSTONE_FLUX);
 		return null;
 	}
-	
+
 	public static final String getToolTipRedstoneFluxAccept(TagData aEnergyType) {
 //      if (aEnergyType == TD.Energy.KU) return Chat.ORANGE + LH.get(LH.ACCEPTS_REDSTONE_FLUX_LOSS)+" 50%";
 		if (aEnergyType == TD.Energy.RF) return Chat.ORANGE + LH.get(LH.ACCEPTS_REDSTONE_FLUX);
 		if (aEnergyType == TD.Energy.MJ) return Chat.ORANGE + LH.get(LH.ACCEPTS_REDSTONE_FLUX);
 		return null;
 	}
-	
+
 	static {
 		add("enchantment.level.11"                      , "XI");
 		add("enchantment.level.12"                      , "XII");
@@ -394,7 +401,7 @@ public class LH {
 		add("enchantment.level.28"                      , "XXVIII");
 		add("enchantment.level.29"                      , "XXIX");
 		add("enchantment.level.30"                      , "XXX");
-		
+
 		add("loot.gt.books"                             , "+Random Books+");
 		add("loot.gt.matdicts"                          , "-Random Material Dictionaries-");
 		add("loot.gt.bottles"                           , "+Bottles+");
@@ -435,7 +442,7 @@ public class LH {
 		add("loot.twilightforest:aurora_boss"           , "*Aurora Tower*");
 		add("loot.twilightforest:troll_garden"          , "-Troll Cave-");
 		add("loot.twilightforest:troll_vault"           , "+Troll Cave+");
-		
+
 		add(EFFICIENCY                                  , "Efficiency");
 		add(RECIPE                                      , "Recipe");
 		add(RECIPES                                     , "Recipes");
@@ -653,11 +660,18 @@ public class LH {
 		add(TIME_WEEKS                                  , "Weeks");
 		add(ADMIN_ONLY_CREATION                         , "Admins have to spawn this in. (or you MineTweaker a Recipe in)");
 		add(WIP                                         , Chat.RESET + Chat.WHITE + Chat.BOLD + "WIP" + Chat.RESET_TOOLTIP + ", This may not be as functional as you expect it to be!");
+        add(FORMED                                      , Chat.GREEN + "Structure Formed");
+        add(NOT_FORMED                                  , Chat.RED + "Structure Incomplete");
+        add(STATUS                                      , "Status");
+        add(RUNNING                                     , "Currently running");
+        add(ACTIVE                                      , "Ready to run");
+        add(NOT_ACTIVE                                  , "Not possible to run");
+        add(PROGRESS                                    , "Progress");
 	}
-	
+
 	public static class Chat {
 		public static final Set<String> BASICALLY_EMPTY_STRINGS = new HashSetNoNulls<>(F, "", " ", "  ", "   ", "    ");
-		
+
 		static {
 			for (EnumChatFormatting tEnum1 : EnumChatFormatting.values()) {
 				// Literally just formatting without Text in it.
@@ -681,7 +695,7 @@ public class LH {
 				}
 			}
 		}
-		
+
 		public static final String
 		   BLACK          = EnumChatFormatting.BLACK.toString()
 		,  DBLUE          = EnumChatFormatting.DARK_BLUE.toString()
@@ -708,7 +722,7 @@ public class LH {
 		,  RESET          = EnumChatFormatting.RESET.toString()
 		,  RESET_TOOLTIP  = RESET + GRAY
 		;
-		
+
 		public static final String
 		  _BLACK          = " " + BLACK
 		, _DBLUE          = " " + DBLUE
@@ -735,7 +749,7 @@ public class LH {
 		, _RESET          = " " + RESET
 		, _RESET_TOOLTIP  = " " + RESET_TOOLTIP
 		;
-		
+
 		public static String
 		  RAINBOW_FAST = BLACK
 		, RAINBOW = BLACK

@@ -31,28 +31,28 @@ import static gregapi.data.CS.T;
 public class MD {
 	public static final ModData UNKNOWN = new ModData("UNKNOWN", "Unknown or Invalid Mod!").setLoaded(F);
 	static {ModData.MODS.put(null, UNKNOWN);}
-	
+
 	public static final ModData MC = new ModData(ModIDs.MC, "Minecraft").setLoaded(T)
-	
+
 	, GT                = new ModData(ModIDs.GT                 , "GregTech")
 	, GAPI              = new ModData(ModIDs.GAPI               , "Greg-API")
 	, GAPI_POST         = new ModData(ModIDs.GAPI_POST          , "Greg-API-Post")
 	, GT5U              = new ModData(ModIDs.GT                 , "GregTech 5 Unofficial")
 	, GT6U              = new ModData(ModIDs.GT                 , "GregTech 6 Unofficial")
-	
+
 	, QT                = new ModData(ModIDs.QT                 , "QwerTech")
-	
+
 	, IC2               = new ModData(ModIDs.IC2                , "IndustrialCraft 2")
 	, IC2C              = new ModData(ModIDs.IC2C               , "IndustrialCraft 2 Classic")
-	
+
 	, NC                = new ModData(ModIDs.NC                 , "Nuclear Control")
 	, IHL               = new ModData(ModIDs.IHL                , "IHL")
-	
+
 	, FMB               = new ModData(ModIDs.FMB                , "Forge Microblocks")
 	, TRANSLOCATOR      = new ModData(ModIDs.TRANSLOCATOR       , "Translocator")
 	, FUNK              = new ModData(ModIDs.FUNK               , "Funky Locomotion")
 	, BAUBLES           = new ModData(ModIDs.BAUBLES            , "Baubles")
-	
+
 	, TC                = new ModData(ModIDs.TC                 , "Thaumcraft")
 	, TCTE              = new ModData(ModIDs.TCTE               , "Thaumcraft Extras")
 	, TCFM              = new ModData(ModIDs.TCFM               , "Forbidden Magic")
@@ -75,36 +75,36 @@ public class MD {
 	, CANDY             = new ModData(ModIDs.CANDY              , "CandyCraft")
 	, ABYSSAL           = new ModData(ModIDs.ABYSSAL            , "AbyssalCraft")
 	, SOULFOREST        = new ModData(ModIDs.SOULFOREST         , "Soul Forest")
-	
+
 	, RC                = new ModData(ModIDs.RC                 , "Railcraft")
-	
+
 	, IE                = new ModData(ModIDs.IE                 , "Immersive Engineering")
-	
+
 	, TE                = new ModData(ModIDs.TE                 , "Thermal Expansion")
 	, TE_FOUNDATION     = new ModData(ModIDs.TE_FOUNDATION      , "Thermal Foundation")
 	, TE_DYNAMICS       = new ModData(ModIDs.TE_DYNAMICS        , "Thermal Dynamics")
 	, TE_DRILLS         = new ModData(ModIDs.TE_DRILLS          , "RF Drills")
-	
+
 	, AE                = new ModData(ModIDs.AE                 , "Applied Energistics")
 	, MO                = new ModData(ModIDs.MO                 , "Matter Overdrive")
-	
+
 	, TFC               = new ModData(ModIDs.TFC                , "TerraFirmaCraft")
 	, TFCP              = new ModData(ModIDs.TFCP               , "TerraFirmaCraft Plus")
-	
+
 	, MET               = new ModData("Metallurgy"              , "Metallurgy")
-	
+
 	, Streams           = new ModData("streams"                 , "Streams")
-	
+
 	, ZTONES            = new ModData(ModIDs.ZTONES             , "Ztones")
 	, CHSL              = new ModData(ModIDs.CHSL               , "Chisel")
-	
+
 	, NePl              = new ModData(ModIDs.NePl               , "Netherite Plus")
 	, NeLi              = new ModData(ModIDs.NeLi               , "Netherlicious")
 	, EnLi              = new ModData(ModIDs.EnLi               , "Enderlicious")
 	, EtFu              = new ModData(ModIDs.EtFu               , "Et Futurum")
 	, BB                = new ModData(ModIDs.BB                 , "Better Beginnings")
 	, DYNAMIC_TREES     = new ModData(ModIDs.DYNAMIC_TREES      , "Dynamic Trees")
-	
+
 	, BbLC              = new ModData(ModIDs.BbLC               , "BiblioCraft")
 	, CARP              = new ModData(ModIDs.CARP               , "Carpenters Blocks")
 	, BETTER_RECORDS    = new ModData(ModIDs.BETTER_RECORDS     , "Better Records")
@@ -114,13 +114,13 @@ public class MD {
 	, LOOTBAGS          = new ModData(ModIDs.LOOTBAGS           , "Lootbags")
 	, EUREKA            = new ModData(ModIDs.EUREKA             , "Eureka")
 	, VN4               = new ModData(ModIDs.VN4                , "Village Names")
-	
+
 	, UB                = new ModData(ModIDs.UB                 , "Underground Biomes")
 	, COG               = new ModData(ModIDs.COG                , "Custom Ore Generation")
 	, PFAA              = new ModData(ModIDs.PFAA               , "Per Fabrica Ad Astra")
 	, MIN               = new ModData(ModIDs.MIN                , "Mineralogy")
 	, RH                = new ModData(ModIDs.RH                 , "Rockhounding")
-	
+
 	, FR                = new ModData(ModIDs.FR                 , "Forestry")
 	, FRMB              = new ModData(ModIDs.FRMB               , "Magic Bees")
 	, BINNIE            = new ModData(ModIDs.BINNIE             , "Binnie's Mods")
@@ -129,7 +129,7 @@ public class MD {
 	, BINNIE_GENETICS   = new ModData(ModIDs.BINNIE_GENETICS    , "Binnie's Genetics")
 	, BINNIE_BOTANY     = new ModData(ModIDs.BINNIE_BOTANY      , "Binnie's Botany")
 	, BINNIE_PATCHER    = new ModData(ModIDs.BINNIE_PATCHER     , "Binnie Patcher")
-	
+
 	, MFR               = new ModData(ModIDs.MFR                , "MineFactory Reloaded")
 	, PnC               = new ModData(ModIDs.PnC                , "PneumaticCraft")
 	, FSP               = new ModData(ModIDs.FSP                , "Flaxbeard's Steam Power")
@@ -139,34 +139,34 @@ public class MD {
 	, EIO               = new ModData(ModIDs.EIO                , "Ender IO")
 	, RT                = new ModData(ModIDs.RT                 , "Random Things")
 	, AA                = new ModData(ModIDs.AA                 , "Actually Additions")
-	
+
 	, SD                = new ModData(ModIDs.SD                 , "Storage Drawers")
 	, BTRS              = new ModData(ModIDs.BTRS               , "Better Storage")
 	, JABBA             = new ModData(ModIDs.JABBA              , "JABBA")
-	
+
 	, MgC               = new ModData(ModIDs.MgC                , "Magneticraft")
 	, BR                = new ModData(ModIDs.BR                 , "Big Reactors")
 	, HBM               = new ModData(ModIDs.HBM                , "HBM's Nuclear Tech Mod")
 	, ELN               = new ModData(ModIDs.ELN                , "Electrical Age")
-	
+
 	, DRGN              = new ModData(ModIDs.DRGN               , "Dragon API")
 	, RoC               = new ModData(ModIDs.RoC                , "RotaryCraft")
 	, ReC               = new ModData(ModIDs.ReC                , "ReactorCraft")
 	, ElC               = new ModData(ModIDs.ElC                , "ElectriCraft")
 	, CrC               = new ModData(ModIDs.CrC                , "ChromatiCraft")
-	
+
 	, VOLTZ             = new ModData(ModIDs.VOLTZ              , "Voltz Engine")
 	, MFFS              = new ModData(ModIDs.MFFS               , "Modular Force Field System")
 	, ICBM              = new ModData(ModIDs.ICBM               , "ICBM")
 	, ATSCI             = new ModData(ModIDs.ATSCI              , "Atomic Science")
-	
+
 	, Mek               = new ModData(ModIDs.Mek                , "Mekanism")
 	, Mek_Tools         = new ModData(ModIDs.Mek_Tools          , "Mekanism Tools")
 	, Mek_Generators    = new ModData(ModIDs.Mek_Generators     , "Mekanism Generators")
-	
+
 	, OC                = new ModData(ModIDs.OC                 , "Open Computers")
 	, CC                = new ModData(ModIDs.CC                 , "ComputerCraft")
-	
+
 	, TreeCap           = new ModData(ModIDs.TreeCap            , "Treecapitator")
 	, HaC               = new ModData(ModIDs.HaC                , "HarvestCraft")
 	, Salt              = new ModData(ModIDs.Salt               , "Salty Mod")
@@ -196,36 +196,36 @@ public class MD {
 	, GrC_Hops          = new ModData(ModIDs.GrC_Hops           , "Growthcraft Hops")
 	, GrC_Milk          = new ModData(ModIDs.GrC_Milk           , "Growthcraft Milk")
 	, GrC_Rice          = new ModData(ModIDs.GrC_Rice           , "Growthcraft Rice")
-	
+
 	, CrGu              = new ModData(ModIDs.CrGu               , "Craft Guide")
 	, SmAc              = new ModData(ModIDs.SmAc               , "Simple Achievements")
 	, HQM               = new ModData(ModIDs.HQM                , "Hardcore Questing Mode")
-	
+
 	, HEX               = new ModData(ModIDs.HEX                , "HEXCraft")
 	, DE                = new ModData(ModIDs.DE                 , "Draconic Evolution")
 	, AV                = new ModData(ModIDs.AV                 , "Avaritia")
-	
+
 	, EB                = new ModData(ModIDs.EB                 , "Enhanced Biomes")
 	, EBXL              = new ModData(ModIDs.EBXL               , "Extra Biomes XL")
 	, BoP               = new ModData(ModIDs.BoP                , "Biomes O' Plenty")
 	, HiL               = new ModData(ModIDs.HiL                , "Highlands")
-	
+
 	, ATG               = new ModData(ModIDs.ATG                , "Alternate Terrain Generation")
 	, RTG               = new ModData(ModIDs.RTG                , "Realistic Terrain Generation")
 	, RWG               = new ModData(ModIDs.RWG                , "Realistic World Generation")
-	
+
 	, A97               = new ModData(ModIDs.A97                , "Aroma1997 Core")
 	, A97_MINING        = new ModData(ModIDs.A97_MINING         , "Aroma1997's Mining Dimension")
-	
+
 	, CW2               = new ModData(ModIDs.CW2                , "Cave World 2")
-	
+
 	, GaSu              = new ModData(ModIDs.GaSu               , "Ganys Surface")
 	, GaNe              = new ModData(ModIDs.GaNe               , "Ganys Nether")
 	, GaEn              = new ModData(ModIDs.GaEn               , "Ganys End")
 	, WdSt              = new ModData(ModIDs.WdSt               , "Ganys Wood Stuff")
-	
+
 	, HEE               = new ModData(ModIDs.HEE                , "Hardcore Ender Expansion")
-	
+
 	, LycM              = new ModData(ModIDs.LycM               , "Lycanites Mobs")
 	, LycM_Fresh        = new ModData(ModIDs.LycM_Fresh         , "Lycanites Mobs (Freshwater)")
 	, LycM_Salt         = new ModData(ModIDs.LycM_Salt          , "Lycanites Mobs (Saltwater)")
@@ -239,7 +239,7 @@ public class MD {
 	, LycM_Inferno      = new ModData(ModIDs.LycM_Inferno       , "Lycanites Mobs (Inferno)")
 	, LycM_Demon        = new ModData(ModIDs.LycM_Demon         , "Lycanites Mobs (Demon)")
 	, LycM_Shadow       = new ModData(ModIDs.LycM_Shadow        , "Lycanites Mobs (Shadow)")
-	
+
 	, BC                = new ModData(ModIDs.BC                 , "BuildCraft")
 	, BC_SILICON        = new ModData(ModIDs.BC_SILICON         , "BuildCraft Silicon")
 	, BC_TRANSPORT      = new ModData(ModIDs.BC_TRANSPORT       , "BuildCraft Transport")
@@ -247,7 +247,7 @@ public class MD {
 	, BC_ENERGY         = new ModData(ModIDs.BC_ENERGY          , "BuildCraft Energy")
 	, BC_BUILDERS       = new ModData(ModIDs.BC_BUILDERS        , "BuildCraft Builders")
 	, BC_ROBOTICS       = new ModData(ModIDs.BC_ROBOTICS        , "BuildCraft Robotics")
-	
+
 	, RP                = new ModData(ModIDs.RP                 , "Redpower")
 	, BP                = new ModData(ModIDs.BP                 , "Blue Power")
 	, PR                = new ModData(ModIDs.PR                 , "Project Red")
@@ -259,15 +259,15 @@ public class MD {
 	, PR_COMPATIBILITY  = new ModData(ModIDs.PR_COMPATIBILITY   , "Project Red Compatibility")
 	, PR_FABRICATION    = new ModData(ModIDs.PR_FABRICATION     , "Project Red Fabrication")
 	, PR_ILLUMINATION   = new ModData(ModIDs.PR_ILLUMINATION    , "Project Red Illumination")
-	
+
 	, WR_CBE_C          = new ModData(ModIDs.WR_CBE_C           , "Wireless Redstone Chickenbones Edition")
 	, WR_CBE_A          = new ModData(ModIDs.WR_CBE_A           , "Wireless Redstone Chickenbones Edition")
 	, WR_CBE_L          = new ModData(ModIDs.WR_CBE_L           , "Wireless Redstone Chickenbones Edition")
-	
+
 	, COFH_API          = new ModData(ModIDs.COFH_API           , "CoFH-API")
 	, COFH_API_ENERGY   = new ModData(ModIDs.COFH_API_ENERGY    , "CoFH-API Energy")
 	, COFH_CORE         = new ModData(ModIDs.COFH_CORE          , "CoFH-Core")
-	
+
 	, OB                = new ModData(ModIDs.OB                 , "Open Blocks")
 	, PA                = new ModData(ModIDs.PA                 , "Progressive Automation")
 	, MNTL              = new ModData(ModIDs.MNTL               , "Mantle")
@@ -279,7 +279,7 @@ public class MD {
 	, BG2               = new ModData(ModIDs.BG2                , "Battlegear 2")
 	, OMT               = new ModData(ModIDs.OMT                , "Open Modular Turrets")
 	, TG                = new ModData(ModIDs.TG                 , "Tech Guns")
-	
+
 	, WARPDRIVE         = new ModData(ModIDs.WARPDRIVE          , "Warp Drive")
 	, FM                = new ModData(ModIDs.FM                 , "Falling Meteors")
 	, GC                = new ModData(ModIDs.GC                 , "Galacticraft")
@@ -289,7 +289,9 @@ public class MD {
 	, GC_EXTRAPLANETS   = new ModData(ModIDs.GC_EXTRAPLANETS    , "Extra Planets")
 	, VULPES            = new ModData(ModIDs.VULPES             , "Lib Vulpes")
 	, MD8               = new ModData(ModIDs.MD8                , "Micdoodle8 Core")
-	
-	, EC3               = new ModData("essentialcraft"          , "EssentialCraft")
+
+	, EC3               = new ModData("essentialcraft"      , "EssentialCraft")
+
+    , XT                = new ModData("extech"              , "ExTech")
 	;
 }

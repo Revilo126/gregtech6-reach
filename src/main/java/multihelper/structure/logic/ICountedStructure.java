@@ -7,4 +7,6 @@ public interface ICountedStructure {
     void setCount(String key, int value);
 
     void decCount(String key);
+
+    void clearCounts();
 }

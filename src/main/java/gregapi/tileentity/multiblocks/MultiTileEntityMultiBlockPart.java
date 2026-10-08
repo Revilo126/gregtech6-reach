@@ -36,6 +36,7 @@ import gregapi.render.ITexture;
 import gregapi.tileentity.ITileEntityAdjacentInventoryUpdatable;
 import gregapi.tileentity.ITileEntityFunnelAccessible;
 import gregapi.tileentity.ITileEntityTapAccessible;
+import gregapi.tileentity.ITileEntityWaila;
 import gregapi.tileentity.data.ITileEntityGibbl;
 import gregapi.tileentity.data.ITileEntityProgress;
 import gregapi.tileentity.data.ITileEntityTemperature;
@@ -48,6 +49,8 @@ import gregapi.tileentity.machines.*;
 import gregapi.tileentity.notick.TileEntityBase05Paintable;
 import gregapi.util.UT;
 import gregapi.util.WD;
+import mcp.mobius.waila.api.IWailaConfigHandler;
+import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -72,19 +75,19 @@ import static gregapi.data.CS.*;
 /**
  * @author Gregorius Techneticies
  */
-public class MultiTileEntityMultiBlockPart extends TileEntityBase05Paintable implements ITileEntityEnergy, ITileEntityCrucible, ITileEntityLogistics, IMTE_OnWalkOver, ITileEntityTemperature, ITileEntityGibbl, ITileEntityProgress, ITileEntityWeight, ITileEntityTapAccessible, ITileEntityFunnelAccessible, ITileEntityEnergyDataCapacitor, ITileEntityAdjacentInventoryUpdatable, IFluidHandler, IMTE_OnBlockAdded, IMTE_BreakBlock, IMTE_AddToolTips, ITileEntityRunningSuccessfully, ITileEntitySwitchableMode, ITileEntitySwitchableOnOff {
+public class MultiTileEntityMultiBlockPart extends TileEntityBase05Paintable implements ITileEntityEnergy, ITileEntityCrucible, ITileEntityLogistics, IMTE_OnWalkOver, ITileEntityTemperature, ITileEntityGibbl, ITileEntityProgress, ITileEntityWeight, ITileEntityTapAccessible, ITileEntityFunnelAccessible, ITileEntityEnergyDataCapacitor, ITileEntityAdjacentInventoryUpdatable, IFluidHandler, IMTE_OnBlockAdded, IMTE_BreakBlock, IMTE_AddToolTips, ITileEntityRunningSuccessfully, ITileEntitySwitchableMode, ITileEntitySwitchableOnOff, ITileEntityWaila {
 	public ChunkCoordinates mTargetPos = null;
-	
+
 	public ITileEntityMultiBlockController mTarget = null;
-	
+
 	protected IIconContainer[][] mTextures = L1L6_IICONCONTAINER;
-	
+
 	public short mDesign = 0;
 	public int mMode = 0;
-	
+
 	public static final int
 	  EVERYTHING                 = 0
-	
+
 	, NO_ENERGY_OUT              = 1
 	, NO_ENERGY_IN               = 2
 	, NO_FLUID_OUT               = 4
@@ -93,14 +96,14 @@ public class MultiTileEntityMultiBlockPart extends TileEntityBase05Paintable imp
 	, NO_ITEM_IN                 = 32
 	, NO_LOGISTICS               = 64
 	, NO_CRUCIBLE                = 128
-	
+
 	, NO_ENERGY                  = NO_ENERGY_IN | NO_ENERGY_OUT
 	, NO_FLUID                   = NO_FLUID_IN  | NO_FLUID_OUT
 	, NO_ITEM                    = NO_ITEM_IN   | NO_ITEM_OUT
-	
+
 	, ONLY_IN                    = NO_ENERGY_OUT | NO_FLUID_OUT | NO_ITEM_OUT | NO_LOGISTICS | NO_CRUCIBLE
 	, ONLY_OUT                   = NO_ENERGY_IN  | NO_FLUID_IN  | NO_ITEM_IN  | NO_LOGISTICS | NO_CRUCIBLE
-	
+
 	, ONLY_ENERGY_OUT            = ~NO_ENERGY_OUT
 	, ONLY_ENERGY_IN             = ~NO_ENERGY_IN
 	, ONLY_FLUID_OUT             = ~NO_FLUID_OUT
@@ -111,7 +114,7 @@ public class MultiTileEntityMultiBlockPart extends TileEntityBase05Paintable imp
 	, ONLY_ITEM_FLUID_IN         = ~(NO_ITEM_IN  | NO_FLUID_IN )
 	, ONLY_ITEM_FLUID_ENERGY_OUT = ~(NO_ITEM_OUT | NO_FLUID_OUT | NO_ENERGY_OUT)
 	, ONLY_ITEM_FLUID_ENERGY_IN  = ~(NO_ITEM_IN  | NO_FLUID_IN  | NO_ENERGY_IN )
-	
+
 	, ONLY_CRUCIBLE              = ~NO_CRUCIBLE
 	, ONLY_LOGISTICS             = ~NO_LOGISTICS
 	, ONLY_ENERGY                = ~NO_ENERGY
@@ -121,17 +124,17 @@ public class MultiTileEntityMultiBlockPart extends TileEntityBase05Paintable imp
 	, ONLY_ITEM_FLUID_ENERGY     = ~(NO_ITEM  | NO_FLUID | NO_ENERGY)
 	, ONLY_ITEM_ENERGY           = ~(NO_ITEM  | NO_ENERGY)
 	, ONLY_FLUID_ENERGY          = ~(NO_FLUID | NO_ENERGY)
-	
+
 	, NOTHING                    = ~EVERYTHING
 	;
-	
+
 	@Override
 	public void readFromNBT2(NBTTagCompound aNBT) {
 		super.readFromNBT2(aNBT);
 		if (aNBT.hasKey(NBT_TARGET)) {mTargetPos = new ChunkCoordinates(UT.Code.bindInt(aNBT.getLong(NBT_TARGET_X)), UT.Code.bindInt(aNBT.getLong(NBT_TARGET_Y)), UT.Code.bindInt(aNBT.getLong(NBT_TARGET_Z)));}
 		if (aNBT.hasKey(NBT_DESIGN)) mDesign = UT.Code.unsignB(aNBT.getByte(NBT_DESIGN));
 		if (aNBT.hasKey(NBT_MODE)) mMode = aNBT.getInteger(NBT_MODE);
-		
+
 		if (CODE_CLIENT) {
 			if (GT_API.sBlockIcons == null && aNBT.hasKey(NBT_TEXTURE)) {
 				String tTextureName = aNBT.getString(NBT_TEXTURE);
@@ -152,7 +155,7 @@ public class MultiTileEntityMultiBlockPart extends TileEntityBase05Paintable imp
 			}
 		}
 	}
-	
+
 	@Override
 	public void writeToNBT2(NBTTagCompound aNBT) {
 		super.writeToNBT2(aNBT);
@@ -165,13 +168,13 @@ public class MultiTileEntityMultiBlockPart extends TileEntityBase05Paintable imp
 		UT.NBT.setNumber(aNBT, NBT_TARGET_Z, mTargetPos.posZ);
 		}
 	}
-	
+
 	@Override
 	public void addToolTips(List<String> aList, ItemStack aStack, boolean aF3_H) {
 		aList.add(LH.Chat.DGRAY    + LH.get(LH.TOOL_TO_BUILD_BUILDER_WAND));
 		aList.add(LH.Chat.DGRAY    + LH.get(LH.TOOL_TO_DETAIL_MAGNIFYINGGLASS));
 	}
-	
+
 	@Override
 	public boolean breakBlock() {
 		ITileEntityMultiBlockController tTarget = getTarget(F);
@@ -182,7 +185,7 @@ public class MultiTileEntityMultiBlockPart extends TileEntityBase05Paintable imp
 		}
 		return F;
 	}
-	
+
 	@Override
 	public void onBlockAdded() {
 		for (byte tSide : ALL_SIDES_VALID) {
@@ -195,7 +198,7 @@ public class MultiTileEntityMultiBlockPart extends TileEntityBase05Paintable imp
 			}
 		}
 	}
-	
+
 	public ITileEntityMultiBlockController getTarget(boolean aCheckValidity) {
 		if (mTargetPos == null) return null;
 		if (mTarget == null || mTarget.isDead()) {
@@ -212,14 +215,14 @@ public class MultiTileEntityMultiBlockPart extends TileEntityBase05Paintable imp
 		}
 		return aCheckValidity && mTarget != null && !mTarget.checkStructure(F) ? null : mTarget;
 	}
-	
+
 	public void setTarget(ITileEntityMultiBlockController aTarget, int aDesign, int aMode) {
 		mTarget = aTarget;
 		mTargetPos = (mTarget == null ? null : mTarget.getCoords());
 		mMode = aMode;
 		setDesign(aDesign);
 	}
-	
+
 	public boolean setDesign(int aDesign) {
 		aDesign = UT.Code.bind8(aDesign);
 		if (aDesign != mDesign) {
@@ -229,25 +232,25 @@ public class MultiTileEntityMultiBlockPart extends TileEntityBase05Paintable imp
 		}
 		return F;
 	}
-	
+
 	@Override
 	public ITexture getTexture2(Block aBlock, int aRenderPass, byte aSide, boolean[] aShouldSideBeRendered) {
 		return aShouldSideBeRendered[aSide] ? BlockTextureMulti.get(BlockTextureDefault.get(mTextures[mDesign][FACES_TBS[aSide]], mRGBa), BlockTextureDefault.get(mTextures[mDesign][FACES_TBS[aSide]+3])) : null;
 	}
-	
+
 	@Override
 	public void adjacentInventoryUpdated(byte aSide, IInventory aTileEntity) {
 		ITileEntityMultiBlockController tTileEntity = getTarget(T);
 		if (tTileEntity instanceof ITileEntityAdjacentInventoryUpdatable) ((ITileEntityAdjacentInventoryUpdatable)tTileEntity).adjacentInventoryUpdated(aSide, aTileEntity);
 	}
-	
+
 	@Override public byte getVisualData() {return (byte)mDesign;}
 	@Override public void setVisualData(byte aData) {mDesign = UT.Code.unsignB(aData); if (mDesign >= mTextures.length) mDesign = 0;}
-	
+
 	@Override public String getTileEntityName() {return "gt.multitileentity.multiblock.part";}
-	
+
 	// Relay Tool Uses
-	
+
 	@Override
 	public long onToolClick2(String aTool, long aRemainingDurability, long aQuality, Entity aPlayer, List<String> aChatReturn, IInventory aPlayerInventory, boolean aSneaking, ItemStack aStack, byte aSide, float aHitX, float aHitY, float aHitZ) {
 		if (aTool.equals(TOOL_wrench) || aTool.equals(TOOL_crowbar)) return super.onToolClick2(aTool, aRemainingDurability, aQuality, aPlayer, aChatReturn, aPlayerInventory, aSneaking, aStack, aSide, aHitX, aHitY, aHitZ);
@@ -264,9 +267,9 @@ public class MultiTileEntityMultiBlockPart extends TileEntityBase05Paintable imp
 		}
 		return super.onToolClick2(aTool, aRemainingDurability, aQuality, aPlayer, aChatReturn, aPlayerInventory, aSneaking, aStack, aSide, aHitX, aHitY, aHitZ);
 	}
-	
+
 	// Relay Inventories
-	
+
 	@Override
 	public ItemStack decrStackSize(int aSlot, int aDecrement) {
 		ITileEntityMultiBlockController tTileEntity = getTarget(T);
@@ -320,7 +323,7 @@ public class MultiTileEntityMultiBlockPart extends TileEntityBase05Paintable imp
 		if (tTileEntity instanceof IMultiBlockInventory) return ((IMultiBlockInventory)tTileEntity).isItemValidForSlot(this, aSlot, aStack);
 		return F;
 	}
-	
+
 	@Override
 	public int[] getAccessibleSlotsFromSide2(byte aSide) {
 		if ((mMode & NO_ITEM) == NO_ITEM) return ZL_INTEGER;
@@ -342,9 +345,9 @@ public class MultiTileEntityMultiBlockPart extends TileEntityBase05Paintable imp
 		if (tTileEntity instanceof IMultiBlockInventory) return ((IMultiBlockInventory)tTileEntity).canExtractItem(this, aSlot, aStack, aSide);
 		return F;
 	}
-	
+
 	// Relay Tanks
-	
+
 	@Override
 	public int fill(ForgeDirection aDirection, FluidStack aFluid, boolean aDoFill) {
 		if ((mMode & NO_FLUID_IN) != 0) return 0;
@@ -396,102 +399,102 @@ public class MultiTileEntityMultiBlockPart extends TileEntityBase05Paintable imp
 		if (tTileEntity instanceof IMultiBlockFluidHandler) return ((IMultiBlockFluidHandler)tTileEntity).getTankInfo(this, UT.Code.side(aDirection));
 		return ZL_FLUIDTANKINFO;
 	}
-	
+
 	@Override
 	public int funnelFill(byte aSide, FluidStack aFluid, boolean aDoFill) {
 		ITileEntityMultiBlockController tTileEntity = getTarget(T);
 		if (tTileEntity instanceof ITileEntityFunnelAccessible) return ((ITileEntityFunnelAccessible)tTileEntity).funnelFill(aSide, aFluid, aDoFill);
 		return 0;
 	}
-	
+
 	@Override
 	public FluidStack tapDrain(byte aSide, int aMaxDrain, boolean aDoDrain) {
 		ITileEntityMultiBlockController tTileEntity = getTarget(T);
 		if (tTileEntity instanceof ITileEntityTapAccessible) return ((ITileEntityTapAccessible)tTileEntity).tapDrain(aSide, aMaxDrain, aDoDrain);
 		return null;
 	}
-	
+
 	@Override
 	public FluidStack nozzleDrain(byte aSide, int aMaxDrain, boolean aDoDrain) {
 		ITileEntityMultiBlockController tTileEntity = getTarget(T);
 		if (tTileEntity instanceof ITileEntityTapAccessible) return ((ITileEntityTapAccessible)tTileEntity).nozzleDrain(aSide, aMaxDrain, aDoDrain);
 		return null;
 	}
-	
+
 	// Relay Control Covers and such
-	
+
 	@Override
 	public boolean getStateRunningPossible() {
 		ITileEntityMultiBlockController tTileEntity = getTarget(T);
 		if (tTileEntity instanceof ITileEntityRunningPossible) return ((ITileEntityRunningPossible)tTileEntity).getStateRunningPossible();
 		return F;
 	}
-	
+
 	@Override
 	public boolean getStateRunningPassively() {
 		ITileEntityMultiBlockController tTileEntity = getTarget(T);
 		if (tTileEntity instanceof ITileEntityRunningPassively) return ((ITileEntityRunningPassively)tTileEntity).getStateRunningPassively();
 		return F;
 	}
-	
+
 	@Override
 	public boolean getStateRunningActively() {
 		ITileEntityMultiBlockController tTileEntity = getTarget(T);
 		if (tTileEntity instanceof ITileEntityRunningActively) return ((ITileEntityRunningActively)tTileEntity).getStateRunningActively();
 		return F;
 	}
-	
+
 	@Override
 	public boolean getStateRunningSuccessfully() {
 		ITileEntityMultiBlockController tTileEntity = getTarget(T);
 		if (tTileEntity instanceof ITileEntityRunningSuccessfully) return ((ITileEntityRunningSuccessfully)tTileEntity).getStateRunningSuccessfully();
 		return F;
 	}
-	
+
 	@Override
 	public boolean getStateOnOff() {
 		ITileEntityMultiBlockController tTileEntity = getTarget(T);
 		if (tTileEntity instanceof ITileEntitySwitchableOnOff) return ((ITileEntitySwitchableOnOff)tTileEntity).getStateOnOff();
 		return F;
 	}
-	
+
 	@Override
 	public byte getStateMode() {
 		ITileEntityMultiBlockController tTileEntity = getTarget(T);
 		if (tTileEntity instanceof ITileEntitySwitchableMode) return ((ITileEntitySwitchableMode)tTileEntity).getStateMode();
 		return 0;
 	}
-	
+
 	@Override
 	public boolean setStateOnOff(boolean aOnOff) {
 		ITileEntityMultiBlockController tTileEntity = getTarget(T);
 		if (tTileEntity instanceof ITileEntitySwitchableOnOff) return ((ITileEntitySwitchableOnOff)tTileEntity).setStateOnOff(aOnOff);
 		return F;
 	}
-	
+
 	@Override
 	public byte setStateMode(byte aMode) {
 		ITileEntityMultiBlockController tTileEntity = getTarget(T);
 		if (tTileEntity instanceof ITileEntitySwitchableMode) return ((ITileEntitySwitchableMode)tTileEntity).setStateMode(aMode);
 		return 0;
 	}
-	
+
 	@Override
 	public long getProgressValue(byte aSide) {
 		ITileEntityMultiBlockController tTileEntity = getTarget(T);
 		if (tTileEntity instanceof ITileEntityProgress) return ((ITileEntityProgress)tTileEntity).getProgressValue(aSide);
 		return 0;
 	}
-	
+
 	@Override
 	public long getProgressMax(byte aSide) {
 		ITileEntityMultiBlockController tTileEntity = getTarget(T);
 		if (tTileEntity instanceof ITileEntityProgress) return ((ITileEntityProgress)tTileEntity).getProgressMax(aSide);
 		return 0;
 	}
-	
+
 	// Relay Energy
-	
+
 	@Override
 	public boolean isEnergyType(TagData aEnergyType, byte aSide, boolean aEmitting) {
 		if (aEmitting) {if ((mMode & NO_ENERGY_OUT) != 0) return F;} else {if ((mMode & NO_ENERGY_IN) != 0) return F;}
@@ -499,7 +502,7 @@ public class MultiTileEntityMultiBlockPart extends TileEntityBase05Paintable imp
 		if (tTileEntity instanceof IMultiBlockEnergy) return ((IMultiBlockEnergy)tTileEntity).isEnergyType(this, aEnergyType, aSide, aEmitting);
 		return F;
 	}
-	
+
 	@Override
 	public Collection<TagData> getEnergyTypes(byte aSide) {
 		if ((mMode & NO_ENERGY) == NO_ENERGY) return Collections.emptyList();
@@ -507,7 +510,7 @@ public class MultiTileEntityMultiBlockPart extends TileEntityBase05Paintable imp
 		if (tTileEntity instanceof IMultiBlockEnergy) return ((IMultiBlockEnergy)tTileEntity).getEnergyTypes(this, aSide);
 		return Collections.emptyList();
 	}
-	
+
 	@Override
 	public boolean isEnergyAcceptingFrom(TagData aEnergyType, byte aSide, boolean aTheoretical) {
 		if ((mMode & NO_ENERGY_IN) != 0) return F;
@@ -515,7 +518,7 @@ public class MultiTileEntityMultiBlockPart extends TileEntityBase05Paintable imp
 		if (tTileEntity instanceof IMultiBlockEnergy) return ((IMultiBlockEnergy)tTileEntity).isEnergyAcceptingFrom(this, aEnergyType, aSide, aTheoretical);
 		return F;
 	}
-	
+
 	@Override
 	public boolean isEnergyEmittingTo(TagData aEnergyType, byte aSide, boolean aTheoretical) {
 		if ((mMode & NO_ENERGY_OUT) != 0) return F;
@@ -523,7 +526,7 @@ public class MultiTileEntityMultiBlockPart extends TileEntityBase05Paintable imp
 		if (tTileEntity instanceof IMultiBlockEnergy) return ((IMultiBlockEnergy)tTileEntity).isEnergyEmittingTo(this, aEnergyType, aSide, aTheoretical);
 		return F;
 	}
-	
+
 	@Override
 	public synchronized long doEnergyInjection(TagData aEnergyType, byte aSide, long aSize, long aAmount, boolean aDoInject) {
 		if ((mMode & NO_ENERGY_IN) != 0) return 0;
@@ -531,7 +534,7 @@ public class MultiTileEntityMultiBlockPart extends TileEntityBase05Paintable imp
 		if (tTileEntity instanceof IMultiBlockEnergy) return ((IMultiBlockEnergy)tTileEntity).doEnergyInjection(this, aEnergyType, aSide, aSize, aAmount, aDoInject);
 		return 0;
 	}
-	
+
 	@Override
 	public long getEnergyDemanded(TagData aEnergyType, byte aSide, long aSize) {
 		if ((mMode & NO_ENERGY_IN) != 0) return 0;
@@ -539,7 +542,7 @@ public class MultiTileEntityMultiBlockPart extends TileEntityBase05Paintable imp
 		if (tTileEntity instanceof IMultiBlockEnergy) return ((IMultiBlockEnergy)tTileEntity).getEnergyDemanded(this, aEnergyType, aSide, aSize);
 		return 0;
 	}
-	
+
 	@Override
 	public synchronized long doEnergyExtraction(TagData aEnergyType, byte aSide, long aSize, long aAmount, boolean aDoExtract) {
 		if ((mMode & NO_ENERGY_OUT) != 0) return 0;
@@ -547,7 +550,7 @@ public class MultiTileEntityMultiBlockPart extends TileEntityBase05Paintable imp
 		if (tTileEntity instanceof IMultiBlockEnergy) return ((IMultiBlockEnergy)tTileEntity).doEnergyExtraction(this, aEnergyType, aSide, aSize, aAmount, aDoExtract);
 		return 0;
 	}
-	
+
 	@Override
 	public long getEnergyOffered(TagData aEnergyType, byte aSide, long aSize) {
 		if ((mMode & NO_ENERGY_OUT) != 0) return 0;
@@ -555,7 +558,7 @@ public class MultiTileEntityMultiBlockPart extends TileEntityBase05Paintable imp
 		if (tTileEntity instanceof IMultiBlockEnergy) return ((IMultiBlockEnergy)tTileEntity).getEnergyOffered(this, aEnergyType, aSide, aSize);
 		return 0;
 	}
-	
+
 	@Override
 	public long getEnergySizeInputMin(TagData aEnergyType, byte aSide) {
 		if ((mMode & NO_ENERGY_IN) != 0) return 0;
@@ -563,7 +566,7 @@ public class MultiTileEntityMultiBlockPart extends TileEntityBase05Paintable imp
 		if (tTileEntity instanceof IMultiBlockEnergy) return ((IMultiBlockEnergy)tTileEntity).getEnergySizeInputMin(this, aEnergyType, aSide);
 		return 0;
 	}
-	
+
 	@Override
 	public long getEnergySizeOutputMin(TagData aEnergyType, byte aSide) {
 		if ((mMode & NO_ENERGY_OUT) != 0) return 0;
@@ -571,7 +574,7 @@ public class MultiTileEntityMultiBlockPart extends TileEntityBase05Paintable imp
 		if (tTileEntity instanceof IMultiBlockEnergy) return ((IMultiBlockEnergy)tTileEntity).getEnergySizeOutputMin(this, aEnergyType, aSide);
 		return 0;
 	}
-	
+
 	@Override
 	public long getEnergySizeInputRecommended(TagData aEnergyType, byte aSide) {
 		if ((mMode & NO_ENERGY_IN) != 0) return 0;
@@ -579,7 +582,7 @@ public class MultiTileEntityMultiBlockPart extends TileEntityBase05Paintable imp
 		if (tTileEntity instanceof IMultiBlockEnergy) return ((IMultiBlockEnergy)tTileEntity).getEnergySizeInputRecommended(this, aEnergyType, aSide);
 		return 0;
 	}
-	
+
 	@Override
 	public long getEnergySizeOutputRecommended(TagData aEnergyType, byte aSide) {
 		if ((mMode & NO_ENERGY_OUT) != 0) return 0;
@@ -587,7 +590,7 @@ public class MultiTileEntityMultiBlockPart extends TileEntityBase05Paintable imp
 		if (tTileEntity instanceof IMultiBlockEnergy) return ((IMultiBlockEnergy)tTileEntity).getEnergySizeOutputRecommended(this, aEnergyType, aSide);
 		return 0;
 	}
-	
+
 	@Override
 	public long getEnergySizeInputMax(TagData aEnergyType, byte aSide) {
 		if ((mMode & NO_ENERGY_IN) != 0) return 0;
@@ -595,7 +598,7 @@ public class MultiTileEntityMultiBlockPart extends TileEntityBase05Paintable imp
 		if (tTileEntity instanceof IMultiBlockEnergy) return ((IMultiBlockEnergy)tTileEntity).getEnergySizeInputMax(this, aEnergyType, aSide);
 		return 0;
 	}
-	
+
 	@Override
 	public long getEnergySizeOutputMax(TagData aEnergyType, byte aSide) {
 		if ((mMode & NO_ENERGY_OUT) != 0) return 0;
@@ -603,78 +606,78 @@ public class MultiTileEntityMultiBlockPart extends TileEntityBase05Paintable imp
 		if (tTileEntity instanceof IMultiBlockEnergy) return ((IMultiBlockEnergy)tTileEntity).getEnergySizeOutputMax(this, aEnergyType, aSide);
 		return 0;
 	}
-	
+
 	@Override
 	public long getEnergyStored(TagData aEnergyType, byte aSide) {
 		ITileEntityMultiBlockController tTileEntity = getTarget(T);
 		if (tTileEntity instanceof IMultiBlockEnergyDataCapacitor) return ((IMultiBlockEnergyDataCapacitor)tTileEntity).getEnergyStored(this, aEnergyType, aSide);
 		return 0;
 	}
-	
+
 	@Override
 	public long getEnergyCapacity(TagData aEnergyType, byte aSide) {
 		ITileEntityMultiBlockController tTileEntity = getTarget(T);
 		if (tTileEntity instanceof IMultiBlockEnergyDataCapacitor) return ((IMultiBlockEnergyDataCapacitor)tTileEntity).getEnergyCapacity(this, aEnergyType, aSide);
 		return 0;
 	}
-	
+
 	@Override
 	public boolean isEnergyCapacitorType(TagData aEnergyType, byte aSide) {
 		ITileEntityMultiBlockController tTileEntity = getTarget(T);
 		if (tTileEntity instanceof IMultiBlockEnergyDataCapacitor) return ((IMultiBlockEnergyDataCapacitor)tTileEntity).isEnergyCapacitorType(this, aEnergyType, aSide);
 		return F;
 	}
-	
+
 	@Override
 	public Collection<TagData> getEnergyCapacitorTypes(byte aSide) {
 		ITileEntityMultiBlockController tTileEntity = getTarget(T);
 		if (tTileEntity instanceof IMultiBlockEnergyDataCapacitor) return ((IMultiBlockEnergyDataCapacitor)tTileEntity).getEnergyCapacitorTypes(this, aSide);
 		return Collections.emptyList();
 	}
-	
-	
-	
+
+
+
 	@Override
 	public double getWeightValue(byte aSide) {
 		ITileEntityMultiBlockController tTileEntity = getTarget(T);
 		if (tTileEntity instanceof ITileEntityWeight) return ((ITileEntityWeight)tTileEntity).getWeightValue(aSide);
 		return 0;
 	}
-	
+
 	@Override
 	public long getGibblValue(byte aSide) {
 		ITileEntityMultiBlockController tTileEntity = getTarget(T);
 		if (tTileEntity instanceof ITileEntityGibbl) return ((ITileEntityGibbl)tTileEntity).getGibblValue(aSide);
 		return 0;
 	}
-	
+
 	@Override
 	public long getGibblMax(byte aSide) {
 		ITileEntityMultiBlockController tTileEntity = getTarget(T);
 		if (tTileEntity instanceof ITileEntityGibbl) return ((ITileEntityGibbl)tTileEntity).getGibblMax(aSide);
 		return 0;
 	}
-	
+
 	@Override
 	public long getTemperatureValue(byte aSide) {
 		ITileEntityMultiBlockController tTileEntity = getTarget(T);
 		if (tTileEntity instanceof ITileEntityTemperature) return ((ITileEntityTemperature)tTileEntity).getTemperatureValue(aSide);
 		return 0;
 	}
-	
+
 	@Override
 	public long getTemperatureMax(byte aSide) {
 		ITileEntityMultiBlockController tTileEntity = getTarget(T);
 		if (tTileEntity instanceof ITileEntityTemperature) return ((ITileEntityTemperature)tTileEntity).getTemperatureMax(aSide);
 		return 0;
 	}
-	
+
 	@Override
 	public void onWalkOver(EntityLivingBase aEntity) {
 		ITileEntityMultiBlockController tTileEntity = getTarget(F);
 		if (tTileEntity instanceof IMTE_OnWalkOver) ((IMTE_OnWalkOver)tTileEntity).onWalkOver(aEntity);
 	}
-	
+
 	@Override
 	public boolean canLogistics(byte aSide) {
 		if ((mMode & NO_LOGISTICS) != 0) return F;
@@ -682,7 +685,7 @@ public class MultiTileEntityMultiBlockPart extends TileEntityBase05Paintable imp
 		if (tTileEntity instanceof ITileEntityLogistics) return ((ITileEntityLogistics)tTileEntity).canLogistics(aSide);
 		return F;
 	}
-	
+
 	@Override
 	public boolean fillMoldAtSide(ITileEntityMold aMold, byte aSide, byte aSideOfMold) {
 		if ((mMode & NO_CRUCIBLE) != 0) return F;
@@ -690,8 +693,19 @@ public class MultiTileEntityMultiBlockPart extends TileEntityBase05Paintable imp
 		if (tTileEntity instanceof ITileEntityCrucible) return ((ITileEntityCrucible)tTileEntity).fillMoldAtSide(aMold, aSide, aSideOfMold);
 		return F;
 	}
-	
-	// Useless Garbage :P
+
+    @Override
+    public List<String> getWailaBody(List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
+        currenttip.add(
+            (this.mTarget != null) ?
+                LH.Chat.RED + "No attached Controller" :
+                LH.Chat.GREEN + "Attached to controller"
+        );
+
+        return currenttip;
+    }
+
+    // Useless Garbage :P
 	@Override public boolean isUseableByPlayer(EntityPlayer aPlayer) {return aPlayer.getDistanceSq(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D) <= 64D;}
 	@Override public void openInventory() {/**/}
 	@Override public void closeInventory() {/**/}

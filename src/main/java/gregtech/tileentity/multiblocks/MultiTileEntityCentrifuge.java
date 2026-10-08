@@ -28,6 +28,9 @@ import gregapi.tileentity.multiblocks.ITileEntityMultiBlockController;
 import gregapi.tileentity.multiblocks.MultiTileEntityMultiBlockPart;
 import gregapi.tileentity.multiblocks.TileEntityBase10MultiBlockMachine;
 import gregapi.util.WD;
+import multihelper.structure.Definition;
+import multihelper.structure.StructureUtil;
+import multihelper.tile.multiblock.TileEntityBase10MultiBlockMachineMH;
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -43,13 +46,13 @@ import static gregapi.data.CS.*;
 /**
  * @author Gregorius Techneticies
  */
-public class MultiTileEntityCentrifuge extends TileEntityBase10MultiBlockMachine {
-	@Override
-	public boolean checkStructure2(ChunkCoordinates aCoordinates, Entity aPlayer, IInventory aInventory) {
+public class MultiTileEntityCentrifuge extends TileEntityBase10MultiBlockMachineMH<MultiTileEntityCentrifuge> {
+
+	public boolean checkStructure23(ChunkCoordinates aCoordinates, Entity aPlayer, IInventory aInventory) {
 		int tX = getOffsetXN(mFacing)-1, tY = yCoord, tZ = getOffsetZN(mFacing)-1;
 		if (worldObj.blockExists(tX-1, tY, tZ-1) && worldObj.blockExists(tX+1, tY, tZ-1) && worldObj.blockExists(tX-1, tY, tZ+1) && worldObj.blockExists(tX+1, tY, tZ+1)) {
 			boolean tSuccess = T;
-			
+
 			if (!ITileEntityMultiBlockController.Util.checkAndSetTarget(this, tX  , tY  , tZ  , 18100, getMultiTileEntityRegistryID(), 1, MultiTileEntityMultiBlockPart.ONLY_ITEM_FLUID, aCoordinates, aPlayer, aInventory)) tSuccess = F;
 			if (!ITileEntityMultiBlockController.Util.checkAndSetTarget(this, tX+1, tY  , tZ  , 18100, getMultiTileEntityRegistryID(), 2, MultiTileEntityMultiBlockPart.ONLY_ITEM_FLUID, aCoordinates, aPlayer, aInventory)) tSuccess = F;
 			if (!ITileEntityMultiBlockController.Util.checkAndSetTarget(this, tX+2, tY  , tZ  , 18100, getMultiTileEntityRegistryID(), 3, MultiTileEntityMultiBlockPart.ONLY_ITEM_FLUID, aCoordinates, aPlayer, aInventory)) tSuccess = F;
@@ -59,7 +62,7 @@ public class MultiTileEntityCentrifuge extends TileEntityBase10MultiBlockMachine
 			if (!ITileEntityMultiBlockController.Util.checkAndSetTarget(this, tX  , tY  , tZ+2, 18100, getMultiTileEntityRegistryID(), 6, MultiTileEntityMultiBlockPart.ONLY_ITEM_FLUID, aCoordinates, aPlayer, aInventory)) tSuccess = F;
 			if (!ITileEntityMultiBlockController.Util.checkAndSetTarget(this, tX+1, tY  , tZ+2, 18100, getMultiTileEntityRegistryID(), 7, MultiTileEntityMultiBlockPart.ONLY_ITEM_FLUID, aCoordinates, aPlayer, aInventory)) tSuccess = F;
 			if (!ITileEntityMultiBlockController.Util.checkAndSetTarget(this, tX+2, tY  , tZ+2, 18100, getMultiTileEntityRegistryID(), 8, MultiTileEntityMultiBlockPart.ONLY_ITEM_FLUID, aCoordinates, aPlayer, aInventory)) tSuccess = F;
-			
+
 			if (!ITileEntityMultiBlockController.Util.checkAndSetTarget(this, tX  , tY+1, tZ  , 18100, getMultiTileEntityRegistryID(), 1, MultiTileEntityMultiBlockPart.ONLY_ITEM_FLUID, aCoordinates, aPlayer, aInventory)) tSuccess = F;
 			if (!ITileEntityMultiBlockController.Util.checkAndSetTarget(this, tX+1, tY+1, tZ  , 18100, getMultiTileEntityRegistryID(), 2, MultiTileEntityMultiBlockPart.ONLY_ITEM_FLUID, aCoordinates, aPlayer, aInventory)) tSuccess = F;
 			if (!ITileEntityMultiBlockController.Util.checkAndSetTarget(this, tX+2, tY+1, tZ  , 18100, getMultiTileEntityRegistryID(), 3, MultiTileEntityMultiBlockPart.ONLY_ITEM_FLUID, aCoordinates, aPlayer, aInventory)) tSuccess = F;
@@ -69,18 +72,39 @@ public class MultiTileEntityCentrifuge extends TileEntityBase10MultiBlockMachine
 			if (!ITileEntityMultiBlockController.Util.checkAndSetTarget(this, tX  , tY+1, tZ+2, 18100, getMultiTileEntityRegistryID(), 6, MultiTileEntityMultiBlockPart.ONLY_ITEM_FLUID, aCoordinates, aPlayer, aInventory)) tSuccess = F;
 			if (!ITileEntityMultiBlockController.Util.checkAndSetTarget(this, tX+1, tY+1, tZ+2, 18100, getMultiTileEntityRegistryID(), 7, MultiTileEntityMultiBlockPart.ONLY_ITEM_FLUID, aCoordinates, aPlayer, aInventory)) tSuccess = F;
 			if (!ITileEntityMultiBlockController.Util.checkAndSetTarget(this, tX+2, tY+1, tZ+2, 18100, getMultiTileEntityRegistryID(), 8, MultiTileEntityMultiBlockPart.ONLY_ITEM_FLUID, aCoordinates, aPlayer, aInventory)) tSuccess = F;
-			
+
 			return tSuccess;
 		}
 		return mStructureOkay;
 	}
-	
-	static {
+
+    static String[][] STRUCTURE = {
+        { "876", "8-6" },
+        { "504", "504" },
+        { "321", "321" },
+    };
+
+    @Override
+    public Definition<MultiTileEntityCentrifuge> getStructure() {
+        return Definition.<MultiTileEntityCentrifuge>builder(STRUCTURE)
+            .where('0', StructureUtil.part(18100, getMultiTileEntityRegistryID(), 0, MultiTileEntityMultiBlockPart.ONLY_ENERGY_IN))
+            .where('1', StructureUtil.part(18100, getMultiTileEntityRegistryID(), 1, MultiTileEntityMultiBlockPart.ONLY_ITEM_FLUID))
+            .where('2', StructureUtil.part(18100, getMultiTileEntityRegistryID(), 2, MultiTileEntityMultiBlockPart.ONLY_ITEM_FLUID))
+            .where('3', StructureUtil.part(18100, getMultiTileEntityRegistryID(), 3, MultiTileEntityMultiBlockPart.ONLY_ITEM_FLUID))
+            .where('4', StructureUtil.part(18100, getMultiTileEntityRegistryID(), 4, MultiTileEntityMultiBlockPart.ONLY_ITEM_FLUID))
+            .where('5', StructureUtil.part(18100, getMultiTileEntityRegistryID(), 5, MultiTileEntityMultiBlockPart.ONLY_ITEM_FLUID))
+            .where('6', StructureUtil.part(18100, getMultiTileEntityRegistryID(), 6, MultiTileEntityMultiBlockPart.ONLY_ITEM_FLUID))
+            .where('7', StructureUtil.part(18100, getMultiTileEntityRegistryID(), 7, MultiTileEntityMultiBlockPart.ONLY_ITEM_FLUID))
+            .where('8', StructureUtil.part(18100, getMultiTileEntityRegistryID(), 8, MultiTileEntityMultiBlockPart.ONLY_ITEM_FLUID))
+            .build();
+    }
+
+    static {
 		LH.add("gt.tooltip.multiblock.centrifuge.1", "3x3x2 of Centrifuge Parts");
 		LH.add("gt.tooltip.multiblock.centrifuge.2", "Main Block centered on Side-Bottom and facing outwards");
 		LH.add("gt.tooltip.multiblock.centrifuge.3", "Input and Output at any Blocks");
 	}
-	
+
 	@Override
 	public void addToolTips(List<String> aList, ItemStack aStack, boolean aF3_H) {
 		aList.add(Chat.CYAN     + LH.get(LH.STRUCTURE) + ":");
@@ -89,13 +113,13 @@ public class MultiTileEntityCentrifuge extends TileEntityBase10MultiBlockMachine
 		aList.add(Chat.WHITE    + LH.get("gt.tooltip.multiblock.centrifuge.3"));
 		super.addToolTips(aList, aStack, aF3_H);
 	}
-	
+
 	@Override
 	public boolean isInsideStructure(int aX, int aY, int aZ) {
 		int tX = getOffsetXN(mFacing), tY = yCoord, tZ = getOffsetZN(mFacing);
 		return aX >= tX - 1 && aY >= tY && aZ >= tZ - 1 && aX <= tX + 1 && aY <= tY + 1 && aZ <= tZ + 1;
 	}
-	
+
 	@Override
 	public void updateAdjacentToggleableEnergySources() {
 		DelegatorTileEntity<TileEntity>
@@ -108,19 +132,19 @@ public class MultiTileEntityCentrifuge extends TileEntityBase10MultiBlockMachine
 			((ITileEntityAdjacentOnOff)tDelegator.mTileEntity).setAdjacentOnOff(getStateOnOff());
 		}
 	}
-	
+
 	@Override
 	public DelegatorTileEntity<IFluidHandler> getFluidOutputTarget(byte aSide, Fluid aOutput) {
 		return getAdjacentTank(SIDE_BOTTOM);
 	}
-	
+
 	@Override
 	public DelegatorTileEntity<TileEntity> getItemOutputTarget(byte aSide) {
 		return getAdjacentTileEntity(SIDE_BOTTOM);
 	}
-	
+
 	@Override public DelegatorTileEntity<IInventory> getItemInputTarget(byte aSide) {return null;}
 	@Override public DelegatorTileEntity<IFluidHandler> getFluidInputTarget(byte aSide) {return null;}
-	
+
 	@Override public String getTileEntityName() {return "gt.multitileentity.multiblock.centrifuge";}
 }

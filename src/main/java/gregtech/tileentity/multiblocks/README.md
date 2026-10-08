@@ -2,13 +2,13 @@
 
 Finished ports:
 - [x] Autoclave
-- [ ] Bath
+- [x] Bath
 - [ ] Bedrock Drill
-- [ ] Centrifuge
+- [x] Centrifuge
 - [x] Coagulator
 - [x] Coke Oven
-- [ ] Crucible
-- [ ] Crusher
+- [ ] Crucible (Have to allow different design when completed)
+- [x] Crusher
 - [ ] Cryo-Distillation Tower
 - [ ] Distillation Tower
 - [ ] Electrolyzer
@@ -29,10 +29,6 @@ Finished ports:
 - [ ] Shredder
 - [ ] Sluice
 - [ ] Squeezer
-- [ ] Tank
 - [ ] Tank 3x3x3
-- [ ] Tank 3x3x3 Metal
-- [ ] Tank 3x3x3 Wood
 - [ ] Tank 5x5x5
-- [ ] Tank 5x5x5 Metal
 - [ ] Von Da Graagg Generator

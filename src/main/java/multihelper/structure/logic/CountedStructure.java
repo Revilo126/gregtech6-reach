@@ -25,6 +25,11 @@ public abstract class CountedStructure implements ICountedStructure {
         setCount(key, getCount(key) - 1);
     }
 
+    @Override
+    public void clearCounts() {
+        counts.clear();
+    }
+
     public boolean checkCounts() {
         boolean tSuccess = T;
         for (String i : counts.keySet()) {
