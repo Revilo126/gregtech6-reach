@@ -69,7 +69,7 @@ public class Loader_OreProcessing implements Runnable {
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	public void run() {
 		new OreDictListenerEvent_Names() {@Override public void addAllListeners() {
-		
+
 		final ITexture[] tStoneTextures = new ITexture[] {
 		  BlockTextureCopied.get(Blocks.stone, 0)
 		, BlockTextureCopied.get(Blocks.cobblestone, 0)
@@ -96,17 +96,17 @@ public class Loader_OreProcessing implements Runnable {
 		addListener(OP.plate.dat(MT.Obsidian).toString(), new IOreDictListenerEvent() {@Override public void onOreRegistration(OreDictRegistrationContainer aEvent) {
 			CoverRegistry.put(aEvent.mStack, new CoverTextureSimple(MT.Obsidian.getTextureSolid(), SFX.MC_DIG_ROCK));
 		}});
-		
+
 		for (BlockBase tBlock : BlocksGT.stones) {
 		final BlockStones tStone = (BlockStones)tBlock;
 		final ITexture[] tTextures = new ITexture[16];
 		for (int i = 0; i < tTextures.length; i++) tTextures[i] = BlockTextureDefault.get(tStone.mIcons[i]);
-		
+
 		addListener(OP.plate.dat(tStone.mMaterial).toString(), new IOreDictListenerEvent() {@Override public void onOreRegistration(OreDictRegistrationContainer aEvent) {
 			CoverRegistry.put(aEvent.mStack, new CoverTextureMulti(T, F, SFX.MC_DIG_ROCK, tTextures));
 		}});
 		}
-		
+
 		}};
 
 		plate                       .addListener(new OreProcessing_CoversMulti((ICondition<OreDictMaterial>)ICondition.TRUE, blockSolid, blockPlate, blockIngot, casingMachine, blockDust, blockRaw));
@@ -119,7 +119,7 @@ public class Loader_OreProcessing implements Runnable {
 		plateGem                    .addListener(new OreProcessing_CoversMulti((ICondition<OreDictMaterial>)ICondition.TRUE, blockGem, blockPlateGem, blockDust, blockRaw));
 		sheetGt                     .addListener(new OreProcessing_CoversMulti((ICondition<OreDictMaterial>)ICondition.TRUE, blockSolid, blockPlate, blockIngot, casingMachine, blockDust, blockRaw));
 		foil                        .addListener(new OreProcessing_CoversMulti((ICondition<OreDictMaterial>)ICondition.TRUE, foil));
-		
+
 		rawOreChunk                 .addListener(new OreProcessing_Maceration(crushedTiny   , 3, ANTIMATTER.NOT));
 		chunk                       .addListener(new OreProcessing_Maceration(dust          , 2, ANTIMATTER.NOT));
 		rubble                      .addListener(new OreProcessing_Maceration(dust          , 2, ANTIMATTER.NOT));
@@ -131,17 +131,17 @@ public class Loader_OreProcessing implements Runnable {
 		crushedPurifiedTiny         .addListener(new OreProcessing_Maceration(dustTiny      , 1, ANTIMATTER.NOT));
 		crushedCentrifuged          .addListener(new OreProcessing_Maceration(dustTiny      ,11, ANTIMATTER.NOT));
 		crushedCentrifugedTiny      .addListener(new OreProcessing_Maceration(dustTiny      , 1, ANTIMATTER.NOT));
-		
+
 		chemtube                    .addListener(new OreProcessing_GlassTube(-1, ANTIMATTER.NOT));
-		
+
 		plantGtBerry                .addListener(new OreProcessing_PlantSqueezing(-1, ANTIMATTER.NOT));
 		plantGtTwig                 .addListener(new OreProcessing_PlantSqueezing(-1, ANTIMATTER.NOT));
 		plantGtFiber                .addListener(new OreProcessing_PlantSqueezing(-1, ANTIMATTER.NOT));
 		plantGtWart                 .addListener(new OreProcessing_PlantSqueezing(-1, ANTIMATTER.NOT));
 		plantGtBlossom              .addListener(new OreProcessing_PlantSqueezing(-1, ANTIMATTER.NOT));
-		
+
 		String tCategory = ConfigCategories.Recipes.gregtechrecipes + ".";
-		
+
 		rotor                       .addListener(new OreProcessing_CraftFrom( 1, tCategory + "rotor"                    , new String[][] {{"YhY", "TXf", "YdY"}}, ring              , plateCurved   , null          , null                          , null                          , new And(ANTIMATTER.NOT, COATED.NOT, SMITHABLE)));
 		toolHeadBuzzSaw             .addListener(new OreProcessing_CraftFrom( 1, tCategory + "toolHeadBuzzSaw"          , new String[][] {{"wPh", "P P", "fPx"}}, null              , null          , null          , null                          , null                          , new And(ANTIMATTER.NOT, COATED.NOT)));
 		toolHeadBuzzSaw             .addListener(new OreProcessing_CraftFrom( 1, tCategory + "toolHeadBuzzSaw"          , new String[][] {{"wCh", "C C", "fCx"}}, null              , null          , null          , null                          , null                          , new And(ANTIMATTER.NOT, COATED.NOT)));
@@ -177,6 +177,7 @@ public class Loader_OreProcessing implements Runnable {
 		plateGem                    .addListener(new OreProcessing_CraftFrom( 7, tCategory + "gem2plateGem"             , new String[][] {{"s " , " X"        }}, gemLegendary      , null          , null          , null                          , null                          , new And(ANTIMATTER.NOT, COATED.NOT)));
 		plateGem                    .addListener(new OreProcessing_CraftFrom( 3, tCategory + "boule2plateGem"           , new String[][] {{"s " , " X"        }}, bouleGt           , null          , null          , null                          , null                          , new And(ANTIMATTER.NOT, COATED.NOT)));
 		minecartWheels              .addListener(new OreProcessing_CraftFrom( 1, tCategory + "minecartWheels"           , new String[][] {{" h ", "XSX", " w "}}, ring              , null          , null          , null                          , null                          , ANTIMATTER.NOT));
+        frameGt                     .addListener(new OreProcessing_CraftFrom( 1, tCategory + "stick2frameGt"            , new String[][] {{"TST", "SwS", "TST"}}, null              , null          , null          , null                          , null                          , new And(ANTIMATTER.NOT, COATED.NOT)));
 
 		arrowGtWood                 .addListener(new OreProcessing_Shapeless( 1, tCategory + "arrowsWooden"             , new Object[] {toolHeadArrow, arrowGtWood   .dat(MT.Empty)}, ANTIMATTER.NOT));
 		arrowGtPlastic              .addListener(new OreProcessing_Shapeless( 1, tCategory + "arrowsPlastic"            , new Object[] {toolHeadArrow, arrowGtPlastic.dat(MT.Empty)}, ANTIMATTER.NOT));
@@ -190,24 +191,24 @@ public class Loader_OreProcessing implements Runnable {
 		toolHeadPickaxeGem          .addListener(new OreProcessing_Shapeless( 1, null, new Object[] {toolHeadRawPickaxe.dat(ANY.Iron), gemFlawed, gemFlawed, OreDictToolNames.file, OreDictToolNames.hammer, OreDictToolNames.saw}, ANTIMATTER.NOT));
 		toolHeadPickaxeGem          .addListener(new OreProcessing_Shapeless( 1, null, new Object[] {toolHeadPickaxe   .dat(ANY.Iron), gemFlawed, gemFlawed, OreDictToolNames.file, OreDictToolNames.hammer, OreDictToolNames.saw}, ANTIMATTER.NOT));
 		toolHeadPickaxeGem          .addListener(new OreProcessing_Shapeless( 1, null, new Object[] {toolHeadPickaxeGem.dat(MT.Empty), gemFlawed, gemFlawed, OreDictToolNames.file, OreDictToolNames.hammer, OreDictToolNames.saw}, ANTIMATTER.NOT));
-		
+
 		CR.shaped(OP.bolt.mat(MT.Wood, 2), RECIPE_BITS, "s " , " S", 'S', IL.Stick);
-		
+
 		IOreDictListenerEvent tProcessor = new OreProcessing_Ore();
 		for (OreDictPrefix tPrefix : OreDictPrefix.VALUES) if (tPrefix.contains(ORE) && !tPrefix.contains(IS_CONTAINER) && tPrefix != oreBedrock && tPrefix != orePoor && tPrefix != oreSmall && tPrefix != oreRich && tPrefix != oreNormal) tPrefix.addListener(tProcessor);
-		
+
 		OreDictManager.INSTANCE.addListener(new RecyclingProcessing());
 	}
-	
+
 	public static class OreProcessing_CoversSimple implements IOreDictListenerEvent {
 		private final ICondition<OreDictMaterial> mCondition;
 		public final OreDictPrefix mTargetPrefix;
-		
+
 		public OreProcessing_CoversSimple(ICondition<OreDictMaterial> aCondition, OreDictPrefix aTargetPrefix) {
 			mTargetPrefix = aTargetPrefix;
 			mCondition = aCondition;
 		}
-		
+
 		@Override
 		public void onOreRegistration(OreDictRegistrationContainer aEvent) {
 			if (mCondition.isTrue(aEvent.mMaterial)) {
@@ -215,7 +216,7 @@ public class Loader_OreProcessing implements Runnable {
 			}
 		}
 	}
-	
+
 	public static class OreProcessing_CoversMulti implements IOreDictListenerEvent {
 		private final ICondition<OreDictMaterial> mCondition;
 		public final OreDictPrefix[] mTargetPrefixes;
@@ -234,12 +235,12 @@ public class Loader_OreProcessing implements Runnable {
 			}
 		}
 	}
-	
+
 	public static class RecyclingProcessing implements IOreDictListenerRecyclable {
 		@Override
 		public void onRecycleableRegistration(OreDictRecyclingContainer aEvent) {
 			if (aEvent.mItemData == null || !ST.ingredable(aEvent.mStack)) return;
-			
+
 			List<OreDictMaterialStack> tList = new ArrayListNoNulls<>();
 			if (aEvent.mItemData.mPrefix == null) {
 				for (OreDictMaterialStack tMaterial : aEvent.mItemData.getAllMaterialStacks()) {
@@ -257,9 +258,9 @@ public class Loader_OreProcessing implements Runnable {
 					if (tMaterial.mMaterial.mTargetSmelting.mAmount > 0 && tMaterial.mMaterial.contains(MELTING) && !tMaterial.mMaterial.contains(BLACKLISTED_SMELTER)) OM.stack(UT.Code.units(tMaterial.mAmount, U, tMaterial.mMaterial.mTargetSmelting.mAmount, F), tMaterial.mMaterial.mTargetSmelting.mMaterial).addToList(tList);
 				}
 			}
-			
+
 			if (tList.isEmpty()) return;
-			
+
 			FluidStack tFluid = null;
 			OreDictMaterialStack tMaterial = null;
 			for (OreDictMaterialStack iMaterial : tList) {
@@ -292,7 +293,7 @@ public class Loader_OreProcessing implements Runnable {
 			}
 		}
 	}
-	
+
 	public static class OreProcessing_Ore implements IOreDictListenerEvent {
 		@Override
 		public void onOreRegistration(OreDictRegistrationContainer aEvent) {
@@ -302,9 +303,9 @@ public class Loader_OreProcessing implements Runnable {
 				registerStandardOreRecipes(aEvent.mPrefix, aEvent.mMaterial, aEvent.mStack, aEvent.mMaterial.mOreProcessingMultiplier * (aEvent.mPrefix.contains(TD.Prefix.DENSE_ORE)?2:1));
 			}
 		}
-		
+
 		private ArrayList<OreDictMaterial> mAlreadyListedOres = new ArrayListNoNulls<>(1000);
-		
+
 		private boolean registerStandardOreRecipes(OreDictPrefix aPrefix, OreDictMaterial aMaterial, ItemStack aOreStack, int aMultiplier) {
 			if (aOreStack == null || aMaterial == null || IL.PFAA_Sands.equal(aOreStack, T, T)) return F;
 			if (COMPAT_IC2 != null && !(aOreStack.getItem() instanceof IItemGT)) COMPAT_IC2.valuable(ST.block(aOreStack), ST.meta_(aOreStack), 2);
@@ -312,19 +313,19 @@ public class Loader_OreProcessing implements Runnable {
 			if (aMaterial == null) return F;
 			aOreStack = ST.amount(1, aOreStack);
 			aMultiplier = UT.Code.bindStack(aMaterial.mOreMultiplier * aMultiplier);
-			
+
 			ItemStack
 			tPrimaryByProductTiny   = null,
 			tSecondaryByProductTiny = null,
 			tTertiaryByProductTiny  = null;
-			
+
 			if (aMaterial == MT.STONES.Gneiss || aMaterial == MT.PetrifiedWood) {
 				RM.Crusher.addRecipe1(T, 16, 64, aOreStack, OP.rockGt.mat(aMaterial, UT.Code.bindStack(aMaterial.mOreMultiplier * aMultiplier * 4)));
 				RM.Hammer .addRecipe1(T, 16, 64, aOreStack, OP.rockGt.mat(aMaterial, UT.Code.bindStack(aMaterial.mOreMultiplier * aMultiplier * 3)));
 			}
-			
+
 			ArrayList<ItemStack> tByProductStacks = new ArrayListNoNulls<>();
-			
+
 			for (OreDictMaterial tMat : aMaterial.mByProducts) {
 				ItemStack tByProduct = OM.dustOrIngot(tMat, U);
 				if (tByProduct != null) tByProductStacks.add(tByProduct);
@@ -332,16 +333,16 @@ public class Loader_OreProcessing implements Runnable {
 				if (tSecondaryByProductTiny == null) tSecondaryByProductTiny = OM.dustOrIngot(tMat, U9); else
 				if (tTertiaryByProductTiny  == null) tTertiaryByProductTiny  = OM.dustOrIngot(tMat, U9);
 			}
-			
+
 			if (!tByProductStacks.isEmpty() && !mAlreadyListedOres.contains(aMaterial)) {
 				mAlreadyListedOres.add(aMaterial);
 				RM.ByProductList.addFakeRecipe(F, ST.array(oreVanillastone.mat(aMaterial, aOreStack, 1), oreRaw.mat(aMaterial, 1), rockGt.mat(aMaterial, 1), crushed.mat(aMaterial, 1), crushedPurified.mat(aMaterial, 1), crushedCentrifuged.mat(aMaterial, 1)), tByProductStacks.toArray(ZL_IS), null, null, null, null, 0, 0, 0);
 			}
-			
+
 			if (tPrimaryByProductTiny == null) tPrimaryByProductTiny = OM.dustOrIngot(aMaterial, U9);
 			if (tSecondaryByProductTiny == null) tSecondaryByProductTiny = tPrimaryByProductTiny;
 			if (tTertiaryByProductTiny == null) tTertiaryByProductTiny = tSecondaryByProductTiny;
-			
+
 			if (aMaterial.contains(FURNACE)) {
 				boolean tIsFood = aMaterial.mTargetSmelting.mMaterial.contains(TD.Properties.FOOD);
 				if(!RM.add_smelting(aOreStack, OM.ingot(aMaterial.mTargetSmelting), F, tIsFood, !tIsFood)) {
@@ -371,23 +372,23 @@ public class Loader_OreProcessing implements Runnable {
 			}
 		}
 	}
-	
+
 	public static class OreProcessing_GlassTube implements IOreDictListenerEvent {
 		private final ICondition<OreDictMaterial> mCondition;
 		private final long mMaterialAmount;
-		
+
 		public OreProcessing_GlassTube(long aOutputMaterialAmount, ICondition<OreDictMaterial> aCondition) {
 			mCondition = aCondition;
 			mMaterialAmount = aOutputMaterialAmount;
 		}
-		
+
 		@Override
 		public void onOreRegistration(OreDictRegistrationContainer aEvent) {
 			if (mCondition.isTrue(aEvent.mMaterial) && aEvent.mMaterial != MT.Empty) {
 				ItemStack tStack = OM.dust(aEvent.mMaterial, mMaterialAmount<0?aEvent.mPrefix.mAmount:mMaterialAmount);
 				FluidStack tFluid1 = aEvent.mMaterial.fluid(DEF_ENV_TEMP, mMaterialAmount<0?aEvent.mPrefix.mAmount:mMaterialAmount, F);
 				FluidStack tFluid2 = aEvent.mMaterial.fluid(DEF_ENV_TEMP, mMaterialAmount<0?aEvent.mPrefix.mAmount:mMaterialAmount, T);
-				
+
 				if (FL.zero(tFluid1)) {
 					tFluid1 = aEvent.mMaterial.liquid(mMaterialAmount<0?aEvent.mPrefix.mAmount:mMaterialAmount, F);
 					tFluid2 = aEvent.mMaterial.liquid(mMaterialAmount<0?aEvent.mPrefix.mAmount:mMaterialAmount, T);
@@ -404,14 +405,14 @@ public class Loader_OreProcessing implements Runnable {
 					tFluid1 = null;
 					tFluid2 = null;
 				}
-				
+
 				if (tStack != null) {
 					RM.Canner.addRecipe2(T, 16, 16, tStack, aEvent.mPrefix.mat(MT.Empty, 1), aEvent.mStack);
 					if (tFluid1 == null || tFluid2 == null || aEvent.mMaterial.mMeltingPoint > DEF_ENV_TEMP) {
 					RM.Canner.addRecipe1(T, 16, 16, aEvent.mStack, aEvent.mPrefix.mat(MT.Empty, 1), tStack);
 					}
 				}
-				
+
 				if (tFluid1 != null && tFluid2 != null) {
 					RM.Canner.addRecipe1(T, 16, 16, aEvent.mPrefix.mat(MT.Empty, 1), tFluid2, NF, aEvent.mStack);
 					if (tStack == null || aEvent.mMaterial.mMeltingPoint <= DEF_ENV_TEMP) {
@@ -421,7 +422,7 @@ public class Loader_OreProcessing implements Runnable {
 			}
 		}
 	}
-	
+
 	public static class OreProcessing_PlantSqueezing implements IOreDictListenerEvent {
 		private final ICondition<OreDictMaterial> mCondition;
 		private final long mOutputMaterialAmount;
@@ -542,7 +543,7 @@ public class Loader_OreProcessing implements Runnable {
 			mCondition = aCondition;
 			mCategoryName = aCategoryName;
 		}
-		
+
 		@Override
 		public void onOreRegistration(OreDictRegistrationContainer aEvent) {
 			if (aEvent.mNotAlreadyRegisteredName && mCondition.isTrue(aEvent.mMaterial) && (mCategoryName == null || ConfigsGT.RECIPES.get(mCategoryName, aEvent.mMaterial.mNameInternal, T))) {

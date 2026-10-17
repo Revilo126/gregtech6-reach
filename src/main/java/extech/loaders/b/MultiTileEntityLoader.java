@@ -65,7 +65,7 @@ public class MultiTileEntityLoader implements Runnable{
     /** Id range 1001 - 2000 */
     public static void multiblocks(MultiTileEntityRegistry aRegistry, MultiTileEntityBlock aMetal, MultiTileEntityBlock aMetalChips, MultiTileEntityBlock aMetalWires, MultiTileEntityBlock aMachine, MultiTileEntityBlock aWooden, MultiTileEntityBlock aBush, MultiTileEntityBlock aStone, MultiTileEntityBlock aWool, MultiTileEntityBlock aTNT, MultiTileEntityBlock aUtilMetal, MultiTileEntityBlock aUtilStone, MultiTileEntityBlock aUtilWood, MultiTileEntityBlock aUtilWool, OreDictMaterial aMat, Class<? extends TileEntity> aClass) {
         aClass = MultiTileEntityMultiBlockPart.class;
-        aMat = MT.Cr; aRegistry.add("Intronic Capacitor (IV)", "Multiblock Machines", 1001, 17101, aClass, aMat.mToolQuality, 64, aMachine, UT.NBT.make(NBT_MATERIAL, aMat, NBT_HARDNESS, 4.0F, NBT_RESISTANCE, 4.0F, NBT_TEXTURE, "introniccapacitor", NBT_DESIGNS, 0));
+        // aMat = MT.Cr; aRegistry.add("Intronic Capacitor (IV)", "Multiblock Machines", 1001, 17101, aClass, aMat.mToolQuality, 64, aMachine, UT.NBT.make(NBT_MATERIAL, aMat, NBT_HARDNESS, 4.0F, NBT_RESISTANCE, 4.0F, NBT_TEXTURE, "introniccapacitor", NBT_DESIGNS, 0));
 
         // aMat = MT.Cr; aRegistry.add("Intronic Ultra Capacitor", "Multiblock Machines", 1002, 17101, MultiTileEntityIntronicUltraCapacitor.class, aMat.mToolQuality, 64, UT.NBT.make(NBT_MATERIAL, aMat, NBT_HARDNESS, 4.0F, NBT_RESISTANCE, 4.0F, NBT_TEXTURE));
     }

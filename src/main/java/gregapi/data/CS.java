@@ -1629,6 +1629,7 @@ public class CS {
 	public static class BlocksGT {
 		public static IPrefixBlock
 		casingMachine, casingMachineDouble, casingMachineQuadruple, casingMachineDense,
+        frameGt,
 		blockGem    , blockDust    , blockIngot    , blockPlate    , blockPlateGem    , blockRaw    , blockSolid,
 		crateGtGem  , crateGtDust  , crateGtIngot  , crateGtPlate  , crateGtPlateGem  , crateGtRaw  ,
 		crateGt64Gem, crateGt64Dust, crateGt64Ingot, crateGt64Plate, crateGt64PlateGem, crateGt64Raw;
